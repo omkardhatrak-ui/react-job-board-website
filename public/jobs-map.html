@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs Near You | JobFinder</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="#">Jobs</a>
+        <a href="#">Companies</a>
+        <a href="./login.html" class="login">Login</a>
+        <a href="./forms.html"><button class="btn">Register</button></a>
+    </div>
+</nav>
+
+<main class="map-page">
+    <section class="map-header">
+        <h1 id="results-title">Jobs Near You</h1>
+        <p id="results-subtitle">Searching nearby openings...</p>
+    </section>
+
+    <section class="map-layout">
+        <div class="map-panel">
+            <h2>Google Map</h2>
+            <iframe id="map-frame" title="Google map for selected location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <div class="jobs-panel">
+            <h2>Available Jobs</h2>
+            <p id="center-note" class="center-note"></p>
+            <div class="filter-bar">
+                <label class="filter-pill">
+                    <span>Radius</span>
+                    <select id="radius-filter">
+                        <option value="0-50">Within 50 km</option>
+                        <option value="0-5">0-5 km</option>
+                        <option value="5-10">5-10 km</option>
+                        <option value="10-15">10-15 km</option>
+                        <option value="15-20">15-20 km</option>
+                        <option value="20-25">20-25 km</option>
+                        <option value="25-30">25-30 km</option>
+                        <option value="30-35">30-35 km</option>
+                        <option value="35-40">35-40 km</option>
+                        <option value="40-45">40-45 km</option>
+                        <option value="45-50">45-50 km</option>
+                    </select>
+                </label>
+
+                <label class="filter-pill">
+                    <span>Pay</span>
+                    <select id="pay-filter">
+                        <option value="any">Any</option>
+                        <option value="unpaid">Unpaid</option>
+                        <option value="10-20">10k-20k</option>
+                        <option value="20-30">20k-30k</option>
+                        <option value="30-50">30k-50k</option>
+                        <option value="50-75">50k-75k</option>
+                        <option value="75-100">75k-100k</option>
+                        <option value="100-150">100k-150k</option>
+                        <option value="150-200">150k-200k</option>
+                    </select>
+                </label>
+
+                <label class="filter-pill">
+                    <span>Skills</span>
+                    <select id="skills-filter">
+                        <option value="any">Any</option>
+                        <option value="frontend">Front End</option>
+                        <option value="backend">Back End</option>
+                        <option value="database">Data Base</option>
+                        <option value="devops">DevOps</option>
+                        <option value="aws">AWS</option>
+                        <option value="infra">Infra</option>
+                    </select>
+                </label>
+
+                <label class="filter-pill">
+                    <span>Work Mode</span>
+                    <select id="mode-filter">
+                        <option value="any">Any</option>
+                        <option value="remote">Remote</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="onsite">Onsite</option>
+                    </select>
+                </label>
+
+                <label class="filter-pill">
+                    <span>Date Posted</span>
+                    <select id="date-filter">
+                        <option value="any">Any</option>
+                        <option value="24">Less than 24 hrs</option>
+                        <option value="168">Last 7 days</option>
+                        <option value="336">Last 14 days</option>
+                        <option value="720">Last 1 month</option>
+                    </select>
+                </label>
+            </div>
+
+            <p id="filter-summary" class="center-note"></p>
+            <ul id="filtered-jobs" class="job-list"></ul>
+        </div>
+    </section>
+</main>
+
+<footer class="copyright">
+    &copy; 2026 JobFinder. All rights reserved.
+</footer>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const selectedLocation = (params.get("location") || "").trim();
+    const keyword = (params.get("keyword") || "").trim();
+    const normalizedKeyword = keyword.toLowerCase();
+    const userLat = Number.parseFloat(params.get("userLat"));
+    const userLng = Number.parseFloat(params.get("userLng"));
+    const hasUserCoords = Number.isFinite(userLat) && Number.isFinite(userLng);
+
+    const titleEl = document.getElementById("results-title")
+    const subtitleEl = document.getElementById("results-subtitle");
+    const centerNoteEl = document.getElementById("center-note");
+    const mapFrame = document.getElementById("map-frame");
+    const jobsListEl = document.getElementById("filtered-jobs");
+    const filterSummaryEl = document.getElementById("filter-summary");
+    const radiusFilterEl = document.getElementById("radius-filter");
+    const payFilterEl = document.getElementById("pay-filter");
+    const skillsFilterEl = document.getElementById("skills-filter");
+    const modeFilterEl = document.getElementById("mode-filter");
+    const dateFilterEl = document.getElementById("date-filter");
+
+    const jobs = [
+        { title: "Frontend Developer", company: "Blue Ridge Tech", lat: 40.7582, lng: -73.9855, payK: 35, unpaid: false, skills: ["frontend", "aws"], mode: "hybrid", postedHours: 8 },
+        { title: "Backend Engineer", company: "Orbit Systems", lat: 40.7336, lng: -73.9893, payK: 48, unpaid: false, skills: ["backend", "database"], mode: "onsite", postedHours: 36 },
+        { title: "DevOps Engineer", company: "CloudForge", lat: 34.0528, lng: -118.2441, payK: 120, unpaid: false, skills: ["devops", "aws", "infra"], mode: "remote", postedHours: 18 },
+        { title: "Database Administrator", company: "Peak Labs", lat: 34.0407, lng: -118.2695, payK: 90, unpaid: false, skills: ["database", "backend"], mode: "hybrid", postedHours: 110 },
+        { title: "Junior UI Intern", company: "Craftline", lat: 37.7851, lng: -122.4065, payK: 0, unpaid: true, skills: ["frontend"], mode: "onsite", postedHours: 20 },
+        { title: "Infrastructure Specialist", company: "Nexa Software", lat: 37.7646, lng: -122.4312, payK: 150, unpaid: false, skills: ["infra", "aws"], mode: "remote", postedHours: 260 },
+        { title: "Full Stack Developer", company: "Northwind Inc.", lat: 41.8879, lng: -87.6232, payK: 70, unpaid: false, skills: ["frontend", "backend", "database"], mode: "hybrid", postedHours: 400 },
+        { title: "AWS Platform Engineer", company: "ElevateWorks", lat: 41.8789, lng: -87.6455, payK: 180, unpaid: false, skills: ["aws", "devops", "infra"], mode: "remote", postedHours: 640 },
+        { title: "Backend Trainee", company: "PrimeLedger", lat: 47.6124, lng: -122.3398, payK: 18, unpaid: false, skills: ["backend"], mode: "onsite", postedHours: 14 },
+        { title: "Data Base Support", company: "CloudPort", lat: 47.6032, lng: -122.3303, payK: 28, unpaid: false, skills: ["database", "infra"], mode: "onsite", postedHours: 80 }
+    ];
+
+    const radiusBands = [
+        { min: 0, max: 5 },
+        { min: 5, max: 10 },
+        { min: 10, max: 15 },
+        { min: 15, max: 20 },
+        { min: 20, max: 25 },
+        { min: 25, max: 30 },
+        { min: 30, max: 35 },
+        { min: 35, max: 40 },
+        { min: 40, max: 45 },
+        { min: 45, max: 50 }
+    ];
+
+    const sampleTitles = ["Frontend Developer", "Backend Developer", "DevOps Engineer", "Database Admin", "UI/UX Designer", "QA Tester", "Cloud Engineer", "Full Stack Developer", "Technical Writer", "Systems Analyst"];
+    const sampleCompanies = ["Skyline Labs", "NeonByte", "Vertex Systems", "Astra Solutions", "QuantumWorks", "NovaTech", "Pioneer Apps", "Summit Soft", "Infinite Loop", "DataCore"];
+
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const destinationFromDistance = (center, distanceKm, bearingDeg) => {
+        const earthRadius = 6371;
+        const br = toRad(bearingDeg);
+        const lat1 = toRad(center.lat);
+        const lng1 = toRad(center.lng);
+
+        const lat2 = Math.asin(
+            Math.sin(lat1) * Math.cos(distanceKm / earthRadius) +
+            Math.cos(lat1) * Math.sin(distanceKm / earthRadius) * Math.cos(br)
+        );
+
+        const lng2 = lng1 + Math.atan2(
+            Math.sin(br) * Math.sin(distanceKm / earthRadius) * Math.cos(lat1),
+            Math.cos(distanceKm / earthRadius) - Math.sin(lat1) * Math.sin(lat2)
+        );
+
+        return { lat: (lat2 * 180) / Math.PI, lng: (lng2 * 180) / Math.PI };
+    };
+
+    const createDummyJobs = (center) => {
+        const dummy = [];
+        const modes = ["remote", "hybrid", "onsite"];
+        const skillsOptions = [
+            ["frontend"],
+            ["backend"],
+            ["database"],
+            ["devops"],
+            ["aws"],
+            ["infra"]
+        ];
+        const payOptions = [
+            { unpaid: true, min: 0, max: 0 },
+            { unpaid: false, min: 10, max: 20 },
+            { unpaid: false, min: 20, max: 30 },
+            { unpaid: false, min: 30, max: 50 },
+            { unpaid: false, min: 50, max: 75 },
+            { unpaid: false, min: 75, max: 100 },
+            { unpaid: false, min: 100, max: 150 },
+            { unpaid: false, min: 150, max: 200 }
+        ];
+
+        radiusBands.forEach((band, bandIndex) => {
+            const centerDistance = (band.min + band.max) / 2;
+            modes.forEach((mode) => {
+                skillsOptions.forEach((skills) => {
+                    payOptions.forEach((payOpt) => {
+                        const bearing = (bandIndex * 37 + mode.length * 13 + skills[0].length * 7 + payOpt.min) % 360;
+                        const point = destinationFromDistance(center, centerDistance, bearing);
+                        const payK = payOpt.unpaid ? 0 : randomInt(payOpt.min, payOpt.max);
+                        const title = `${mode.charAt(0).toUpperCase() + mode.slice(1)} ${skills[0]} Specialist`;
+
+                        dummy.push({
+                            title,
+                            company: pick(sampleCompanies),
+                            lat: point.lat,
+                            lng: point.lng,
+                            payK,
+                            unpaid: payOpt.unpaid,
+                            skills,
+                            mode,
+                            postedHours: randomInt(2, 720)
+                        });
+                    });
+                });
+            });
+        });
+        return dummy;
+    };
+
+    const toRad = (value) => (value * Math.PI) / 180;
+    const distanceKm = (aLat, aLng, bLat, bLng) => {
+        const earthRadius = 6371;
+        const dLat = toRad(bLat - aLat);
+        const dLng = toRad(bLng - aLng);
+        const s1 = Math.sin(dLat / 2) ** 2;
+        const s2 = Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(s1 + s2), Math.sqrt(1 - s1 - s2));
+        return earthRadius * c;
+    };
+
+    const renderJobs = (list) => {
+        jobsListEl.innerHTML = "";
+        if (!list.length) {
+            jobsListEl.innerHTML = '<li class="job-empty">No jobs found for selected filters.</li>';
+            filterSummaryEl.textContent = "0 jobs match your filters.";
+            return;
+        }
+
+        filterSummaryEl.textContent = `${list.length} job(s) found.`;
+        list.forEach((job) => {
+            const item = document.createElement("li");
+            item.className = "job-item";
+            item.innerHTML = `
+                <strong>${job.title}</strong>
+                <span>${job.company}</span>
+                <span>${job.distance.toFixed(1)} km away | ${job.mode} | ${job.unpaid ? "Unpaid" : `${job.payK}k`}</span>
+                <span>Skills: ${job.skills.join(", ")} | Posted: ${Math.ceil(job.postedHours / 24)} day(s) ago</span>
+            `;
+            jobsListEl.appendChild(item);
+        });
+    };
+
+
+
+    const parseRange = (value) => {
+        const [min, max] = value.split("-").map(Number);
+        return { min, max };
+    };
+
+    const inPayRange = (job, payFilter) => {
+        if (payFilter === "any") return true;
+        if (payFilter === "unpaid") return job.unpaid;
+        if (job.unpaid) return false;
+        const { min, max } = parseRange(payFilter);
+        return job.payK >= min && job.payK <= max;
+    };
+
+    const applyFilters = (scoredJobs) => {
+        const radiusRange = parseRange(radiusFilterEl.value);
+        const payFilter = payFilterEl.value;
+        const skillsFilter = skillsFilterEl.value;
+        const modeFilter = modeFilterEl.value;
+        const dateFilterHours = dateFilterEl.value === "any" ? null : Number(dateFilterEl.value);
+
+        return scoredJobs
+            .filter((job) => job.distance >= radiusRange.min && job.distance <= radiusRange.max)
+            .filter((job) => inPayRange(job, payFilter))
+            .filter((job) => skillsFilter === "any" || job.skills.includes(skillsFilter))
+            .filter((job) => modeFilter === "any" || job.mode === modeFilter)
+            .filter((job) => dateFilterHours === null || job.postedHours <= dateFilterHours)
+            .filter((job) => {
+                if (!normalizedKeyword) return true;
+                const target = `${job.title} ${job.company} ${job.skills.join(" ")}`.toLowerCase();
+                return target.includes(normalizedKeyword);
+            })
+            .sort((a, b) => a.distance - b.distance);
+    };
+
+    const setMap = (locationText) => {
+        const mapQuery = encodeURIComponent(locationText);
+        mapFrame.src = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
+    };
+
+    const setMapByCoords = (lat, lng) => {
+        mapFrame.src = `https://www.google.com/maps?q=${lat},${lng}&z=13&output=embed`;
+    };
+
+    const geocodeLocation = async (locationText) => {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(locationText)}`;
+        const response = await fetch(url, {
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to geocode location");
+        }
+
+        const data = await response.json();
+        if (!data.length) {
+            throw new Error("No matching location found");
+        }
+
+        return {
+            lat: Number.parseFloat(data[0].lat),
+            lng: Number.parseFloat(data[0].lon)
+        };
+    };
+
+    const run = async () => {
+        if (!selectedLocation && !hasUserCoords) {
+            titleEl.textContent = "Location Missing";
+            subtitleEl.textContent = "Please go back and enter a location or allow geolocation.";
+            centerNoteEl.textContent = "No location input or geolocation found.";
+            renderJobs([]);
+            return;
+        }
+
+        const displayLocation = selectedLocation || "your current location";
+        titleEl.textContent = keyword
+            ? `${keyword} jobs near ${displayLocation}`
+            : `Jobs near ${displayLocation}`;
+        subtitleEl.textContent = "Showing openings based on your location radius.";
+
+        let center;
+        const hasSelectedLocation = Boolean(selectedLocation);
+
+        if (hasSelectedLocation) {
+            try {
+                center = await geocodeLocation(selectedLocation);
+                centerNoteEl.textContent = `Using entered location (${selectedLocation}) as search center.`;
+                setMap(selectedLocation);
+            } catch (e) {
+                if (hasUserCoords) {
+                    center = { lat: userLat, lng: userLng };
+                    centerNoteEl.textContent = "Unable to geocode entered location; using browser geolocation as search center.";
+                    setMapByCoords(userLat, userLng);
+                } else {
+                    throw e;
+                }
+            }
+        } else if (hasUserCoords) {
+            center = { lat: userLat, lng: userLng };
+            centerNoteEl.textContent = "Using your browser geolocation as search center.";
+            setMapByCoords(userLat, userLng);
+        } else {
+            throw new Error("No location data available.");
+        }
+
+        const allJobs = jobs.concat(createDummyJobs(center));
+        const nearby = allJobs
+            .map((job) => ({
+                ...job,
+                distance: distanceKm(center.lat, center.lng, job.lat, job.lng)
+            }))
+            .filter((job) => job.distance <= 50);
+
+        const refresh = () => {
+            const filtered = applyFilters(nearby);
+            renderJobs(filtered);
+        };
+
+        [radiusFilterEl, payFilterEl, skillsFilterEl, modeFilterEl, dateFilterEl].forEach((filterEl) => {
+            filterEl.addEventListener("change", refresh);
+        });
+
+        refresh();
+    };
+
+    run().catch(() => {
+        subtitleEl.textContent = "Could not load nearby jobs for this location.";
+        centerNoteEl.textContent = "Try another city or check your network connection.";
+        renderJobs([]);
+    });
+</script>
+
+</body>
+</html>

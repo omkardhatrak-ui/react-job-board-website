@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobFinder</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="#">Jobs</a>
+        <a href="#">Companies</a>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="./login.html" class="login">Login</a>
+        <a href="./forms.html"><button class="btn">Register</button></a>
+    </div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find Your Dream Job</h1>
+        <p>Search Thousands of Jobs Across Various Industries</p>
+
+        <form id="job-search-form" class="search-box">
+            <input id="keyword-input" type="search" placeholder="Job title or keyword">
+            <input id="location-input" type="search" placeholder="Location">
+            <button class="btn" type="submit">Search Jobs</button>
+        </form>
+
+        <p class="popular">
+            Popular Searches: Marketing, Sales, IT, Finance, Design
+        </p>
+
+        <div class="search-feedback">
+            <p id="search-status">Tip: Enter a job title, a city, or both to begin.</p>
+            <p id="search-count">Searches this session: 0</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED JOBS ===== -->
+<section class="container">
+    <h2 class="section-title">Featured Jobs</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Software Engineer</h3>
+            <p>at Tech Solutions</p>
+            <span>Location: New York, NY</span>
+            <div class="job-footer">
+                <span class="tag full">Full-Time</span>
+                <button class="btn small">Apply Now</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Digital Marketing Manager</h3>
+            <p>at Creative Agency</p>
+            <span>Location: Los Angeles, CA</span>
+            <div class="job-footer">
+                <span class="tag part">Part-Time</span>
+                <button class="btn small">Apply Now</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Sales Executive</h3>
+            <p>at Global Corp</p>
+            <span>Location: Chicago, IL</span>
+            <div class="job-footer">
+                <span class="tag full">Full-Time</span>
+                <button class="btn small">Apply Now</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Product Designer</h3>
+            <p>at Innovatech</p>
+            <span>Location: San Francisco, CA</span>
+            <div class="job-footer">
+                <span class="tag part">Part-Time</span>
+                <button class="btn small">Apply Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="container light">
+    <h2 class="section-title">Browse by Category</h2>
+
+    <div class="cards category">
+        <div class="card">IT & Software</div>
+        <div class="card">Sales & Marketing</div>
+        <div class="card">Finance & Accounting</div>
+        <div class="card">Design & Creative</div>
+        <div class="card">Customer Service</div>
+        <div class="card">Engineering</div>
+    </div>
+</section>
+
+<!-- ===== TOP COMPANIES ===== -->
+<section class="container">
+    <h2 class="section-title">Top Hiring Companies</h2>
+
+    <div class="cards company">
+        <div class="card">Tech Solutions</div>
+        <div class="card">Global Corp</div>
+        <div class="card">Creative Agency</div>
+        <div class="card">Next Innovations</div>
+    </div>
+</section>
+
+<!-- ===== CAREER TIPS ===== -->
+<section class="container light">
+    <h2 class="section-title">Career Tips & Advice</h2>
+
+    <div class="cards">
+        <div class="card">
+            <img src="./images/resume_img.webp" alt="">
+            <h4>Resume Writing Tips</h4>
+            <p>April 10, 2022</p>
+            <a href="#">Read More</a>
+        </div>
+
+        <div class="card">
+            <img src="./images/interview_img.jpg" alt="">
+            <h4>How to Ace Your Interview</h4>
+            <p>March 25, 2022</p>
+            <a href="#">Read More</a>
+        </div>
+
+        <div class="card">
+            <img src="./images/networking_img.jpg" alt="">
+            <h4>Networking Strategies</h4>
+            <p>March 15, 2022</p>
+            <a href="#">Read More</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div>
+        <h3>Quick Links</h3>
+        <a href="#">About Us</a>
+        <a href="#">Browse Jobs</a>
+        <a href="#">Post a Job</a>
+        <a href="#">Contact Us</a>
+    </div>
+
+    <div>
+        <h3>Job Seekers</h3>
+        <a href="#">Find Jobs</a>
+        <a href="#">Upload Resume</a>
+        <a href="#">Job Alerts</a>
+    </div>
+
+    <div>
+        <h3>Employers</h3>
+        <a href="#">Post a Job</a>
+        <a href="#">Company Profiles</a>
+        <a href="#">Hiring Solutions</a>
+    </div>
+
+    <div>
+        <h3>Follow Us</h3>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+    </div>
+</footer>
+
+<div class="copyright">
+    &copy; 2026 JobFinder. All rights reserved.
+</div>
+
+<script>
+    const searchForm = document.getElementById("job-search-form");
+    const locationInput = document.getElementById("location-input");
+    const keywordInput = document.getElementById("keyword-input");
+    const searchStatus = document.getElementById("search-status");
+    const searchCount = document.getElementById("search-count");
+
+    // Constructor Function: stores each search as a session object.
+    function SearchSession(keyword, location, searchMode) {
+        this.keyword = keyword || "All roles";
+        this.location = location || "Current location";
+        this.searchMode = searchMode || "Smart search";
+        this.createdAt = new Date();
+    }
+
+    SearchSession.prototype.describe = function () {
+        return `${this.keyword} jobs near ${this.location} using ${this.searchMode}`;
+    };
+
+    // Default parameters: builds a readable search summary even when values are missing.
+    const buildSearchSummary = (keyword = "All roles", location = "your area", searchMode = "Smart search") => {
+        return `${keyword} jobs near ${location} (${searchMode})`;
+    };
+
+    // Closure Function: remembers how many searches happened in the current session.
+    const createSearchTracker = () => {
+        let totalSearches = 0;
+
+        return (session) => {
+            totalSearches += 1;
+            searchCount.textContent = `Searches this session: ${totalSearches}`;
+            return `Latest search: ${session.describe()}`;
+        };
+    };
+
+    const trackSearch = createSearchTracker();
+
+    function updateSearchStatus(prefix, message) {
+        this.element.textContent = `${prefix}${message}`;
+    }
+
+    const searchStatusContext = { element: searchStatus };
+    const showSearchTip = updateSearchStatus.bind(searchStatusContext, "Tip: ");
+    showSearchTip("Enter a job title, a city, or both to begin.");
+
+    const redirectToResults = (location, keyword, coords) => {
+        const params = new URLSearchParams();
+        if (location) {
+            params.set("location", location);
+        }
+
+        if (keyword) {
+            params.set("keyword", keyword);
+        }
+
+        if (coords) {
+            params.set("userLat", coords.latitude.toString());
+            params.set("userLng", coords.longitude.toString());
+        }
+
+        window.location.href = `jobs-map.html?${params.toString()}`;
+    };
+
+    searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const location = locationInput.value.trim();
+        const keyword = keywordInput.value.trim();
+        const searchSession = new SearchSession(keyword, location, "Location and keyword search");
+        const latestSearch = trackSearch(searchSession);
+
+        // call/apply/bind: reuse one UI updater with different contexts/arguments.
+        updateSearchStatus.call(
+            searchStatusContext,
+            "Searching: ",
+            `${buildSearchSummary(searchSession.keyword, searchSession.location, searchSession.searchMode)}.`
+        );
+
+        if (!navigator.geolocation) {
+            if (location) {
+                redirectToResults(location, keyword, null);
+            } else {
+                updateSearchStatus.apply(searchStatusContext, [
+                    "Tip: ",
+                    "Geolocation is unavailable, so please type a location to continue."
+                ]);
+                alert("Geolocation is unavailable. Please type a location to search jobs.");
+                locationInput.focus();
+            }
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                updateSearchStatus.apply(searchStatusContext, ["Searching: ", `${latestSearch}. Redirecting to nearby results.`]);
+                if (location || keyword) {
+                    redirectToResults(location, keyword, position.coords);
+                } else {
+                    redirectToResults("", "", position.coords);
+                }
+            },
+            () => {
+                if (location) {
+                    updateSearchStatus.call(searchStatusContext, "Searching: ", `${latestSearch}. Using the typed location only.`);
+                    redirectToResults(location, keyword, null);
+                } else if (keyword) {
+                    updateSearchStatus.call(searchStatusContext, "Searching: ", `${latestSearch}. Keyword search will use default results.`);
+                    redirectToResults("", keyword, null);
+                } else {
+                    updateSearchStatus.call(searchStatusContext, "Tip: ", "Allow location access or type a location to find jobs.");
+                    alert("Unable to get your current location. Please enter a location manually.");
+                    locationInput.focus();
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 7000,
+                maximumAge: 120000
+            }
+        );
+    });
+
+    keywordInput.addEventListener("focus", () => {
+        showSearchTip("Try roles like Frontend Developer, Backend Engineer, or DevOps Engineer.");
+    });
+
+    locationInput.addEventListener("focus", () => {
+        showSearchTip("You can type a city name if you do not want to use browser location.");
+    });
+</script>
+
+</body>
+</html>

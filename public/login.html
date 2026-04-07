@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | JobFinder</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e9f2ff 0%, #f6f0ff 45%, #eef7ff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo svg {
+            width: 200px;
+            height: 60px;
+            display: block;
+            overflow: visible;
+            animation: logo-float 4s ease-in-out infinite;
+        }
+
+        .logo-text {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 0.6px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #1e6fd9, #f39b2f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo .pin {
+            fill: url(#grad);
+            stroke: #ffffffaa;
+            stroke-width: 3;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: logo-draw 2s ease forwards;
+            filter: drop-shadow(0 0 8px #38bdf8);
+        }
+
+        .logo .halo {
+            fill: rgba(56, 189, 248, 0.18);
+            animation: logo-halo 2.6s ease-in-out infinite;
+        }
+
+        .logo .briefcase {
+            fill: #0f172a;
+            animation: logo-bounce 2s infinite ease-in-out;
+        }
+
+        .logo .pulse {
+            fill: none;
+            stroke: #67e8f9;
+            stroke-width: 3;
+            animation: logo-pulse 1.5s infinite;
+        }
+
+        .logo .logo-text-svg {
+            font-size: 28px;
+            fill: url(#grad);
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: logo-fade-in 1s forwards 1.6s;
+            filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.35));
+        }
+
+        @keyframes logo-draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes logo-bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes logo-float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        @keyframes logo-halo {
+            0% {
+                opacity: 0.2;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 0.45;
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes logo-pulse {
+            0% {
+                r: 18;
+                opacity: 1;
+            }
+            100% {
+                r: 30;
+                opacity: 0;
+            }
+        }
+
+        @keyframes logo-fade-in {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .nav-links .register-btn {
+            background: #1e63d5;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+        }
+
+        /* ===== FORM SECTION ===== */
+        .form-container {
+            max-width: 640px;
+            width: min(640px, calc(100% - 48px));
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.96);
+            margin: 50px auto;
+            padding: 34px;
+            border-radius: 16px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            backdrop-filter: blur(6px);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            color: #1e63d5;
+            margin-bottom: 6px;
+            font-size: 30px;
+        }
+
+        .form-container p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #0f172a;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #cbd5f0;
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #6a9bff;
+            box-shadow: 0 0 0 3px rgba(99, 132, 255, 0.2);
+        }
+
+        button {
+            background: #1e63d5;
+            color: white;
+            border: none;
+            box-sizing: border-box;
+            padding: 12px 16px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        button:hover {
+            background: #174fb3;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 25px rgba(30, 99, 213, 0.25);
+        }
+
+        .helper {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .helper a {
+            color: #1e63d5;
+            text-decoration: none;
+        }
+
+        .req {
+            color: #c62828;
+            margin-left: 4px;
+        }
+
+        .field.invalid {
+            border-color: #c62828;
+            box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.15);
+        }
+
+        .error-msg {
+            color: #c62828;
+            font-size: 12px;
+            margin-top: -12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .form-response {
+            text-align: center;
+            color: #1e63d5;
+            font-weight: bold;
+            margin: 12px 0 0;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .form-response.show {
+            opacity: 1;
+        }
+
+        .form-response.error {
+            color: #c62828;
+        }
+
+        /* ===== JSON ASSIGNMENT LAB ===== */
+        .json-lab {
+            max-width: 900px;
+            width: min(900px, calc(100% - 48px));
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.96);
+            margin: 0 auto 40px;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+        }
+
+        .json-lab h2 {
+            margin: 0 0 6px;
+            color: #1e63d5;
+        }
+
+        .json-lab p {
+            margin: 0 0 18px;
+            color: #475569;
+        }
+
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 0 0 14px;
+        }
+
+        .before-after .card {
+            border: 1px solid #dbeafe;
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .before-after .card strong {
+            display: inline-block;
+            margin-bottom: 5px;
+            color: #1e3a8a;
+        }
+
+        .json-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .json-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .json-actions button {
+            width: auto;
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
+        .json-status {
+            min-height: 20px;
+            color: #1e63d5;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .json-status.error {
+            color: #c62828;
+        }
+
+        .json-output {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 16px;
+        }
+
+        .json-output table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .json-output th,
+        .json-output td {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .json-output th {
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .json-side {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .json-side select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5f5;
+            border-radius: 8px;
+        }
+
+        .json-side pre {
+            margin: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            min-height: 130px;
+            font-size: 12px;
+        }
+
+        .json-side .mini-title {
+            font-size: 12px;
+            color: #475569;
+            margin: 0 0 -6px;
+        }
+
+        @media (max-width: 768px) {
+            .before-after {
+                grid-template-columns: 1fr;
+            }
+
+            .json-output {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            color: #666;
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="#">Jobs</a>
+        <a href="#">Companies</a>
+        <a href="./login.html">Login</a>
+        <a href="./forms.html" class="register-btn">Register</a>
+    </div>
+</div>
+
+<!-- ===== FORM ===== -->
+<div class="form-container">
+    <h1>Login</h1>
+    <p>Welcome back. Please sign in to continue.</p>
+
+    <form id="login-form" novalidate>
+        <label>Email Address<span class="req">*</span></label>
+        <input class="field" type="email" name="email" placeholder="Enter your email" required>
+
+        <label>Password<span class="req">*</span></label>
+        <input class="field" type="password" name="password" placeholder="Enter your password" required>
+        <small id="error-password" class="error-msg"></small>
+
+        <button type="submit">Login</button>
+        <p id="login-response" class="form-response" aria-live="polite"></p>
+        <div class="helper">
+            New to JobFinder? <a href="./forms.html">Create an account</a>
+        </div>
+    </form>
+</div>
+
+<!-- ===== JSON ASSIGNMENT LAB ===== -->
+<section class="json-lab" aria-labelledby="json-lab-heading">
+    <h2 id="json-lab-heading">Job Data Hub</h2>
+    <p>Manage job listings data: save and load JSON, simulate data exchange, and view jobs in table and dropdown formats.</p>
+    <div class="before-after">
+        <div class="card">
+            <strong>Core Features:</strong><br>
+            Store and retrieve jobs with localStorage, keeping data available even after refresh.
+        </div>
+        <div class="card">
+            <strong>Live Data View:</strong><br>
+            Simulate send/receive flow and render the received JSON in both the table and job selector.
+        </div>
+    </div>
+
+    <form id="job-json-form" novalidate>
+        <div class="json-grid">
+            <input type="text" name="title" placeholder="Job Title (e.g., Frontend Developer)" required>
+            <input type="text" name="company" placeholder="Company (e.g., Infosys)" required>
+            <input type="text" name="location" placeholder="Location (e.g., Bengaluru)" required>
+            <input type="text" name="type" placeholder="Type (e.g., Full-time)" required>
+        </div>
+        <div class="json-actions">
+            <button type="submit">Add Job To JSON List</button>
+            <button type="button" id="save-jobs-btn">Store JSON (localStorage)</button>
+            <button type="button" id="load-jobs-btn">Retrieve JSON (localStorage)</button>
+            <button type="button" id="simulate-json-btn">Simulate Send & Receive JSON</button>
+            <button type="button" id="clear-jobs-btn">Clear Stored Jobs</button>
+        </div>
+    </form>
+
+    <div id="json-status" class="json-status" aria-live="polite"></div>
+
+    <div class="json-output">
+        <div>
+            <table aria-label="Received jobs table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-table-body"></tbody>
+            </table>
+        </div>
+        <div class="json-side">
+            <select id="jobs-dropdown" aria-label="Jobs dropdown list">
+                <option value="">Select a job from received JSON data</option>
+            </select>
+            <pre id="selected-job-preview">Select a job from dropdown to view details.</pre>
+            <p class="mini-title">Sent JSON payload:</p>
+            <pre id="sent-json-preview">[]</pre>
+            <p class="mini-title">Received JSON payload:</p>
+            <pre id="json-preview">[]</pre>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    © 2026 JobFinder. All rights reserved.
+</footer>
+
+<script>
+    const loginForm = document.getElementById("login-form");
+    const loginResponse = document.getElementById("login-response");
+    const passwordInput = loginForm.elements["password"];
+    const passwordError = document.getElementById("error-password");
+
+    const requiredLoginFields = loginForm.querySelectorAll(".field[required]");
+
+    const getPasswordError = (password) => {
+        if (!password.trim()) return "Password is required.";
+        if (password.length < 6) return "Password must be at least 6 characters.";
+        if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
+        if (!/\d/.test(password)) return "Password must include at least one number.";
+        if (!/[^A-Za-z0-9]/.test(password)) return "Password must include at least one special character.";
+        return "";
+    };
+
+    const setPasswordError = (message) => {
+        const hasError = Boolean(message);
+        passwordInput.classList.toggle("invalid", hasError);
+        passwordError.textContent = message;
+        passwordError.classList.toggle("show", hasError);
+    };
+
+    const validatePassword = () => {
+        const message = getPasswordError(passwordInput.value);
+        setPasswordError(message);
+        return !message;
+    };
+
+    const updateLoginFieldStyles = () => {
+        requiredLoginFields.forEach((field) => {
+            field.classList.toggle("invalid", !field.checkValidity());
+        });
+    };
+
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        loginResponse.classList.remove("error");
+
+        if (!loginForm.checkValidity()) {
+            loginResponse.textContent = "Please fill in all required fields.";
+            loginResponse.classList.add("show", "error");
+            updateLoginFieldStyles();
+            validatePassword();
+            return;
+        }
+
+        if (!validatePassword()) {
+            loginResponse.textContent = "Password must meet all required rules.";
+            loginResponse.classList.add("show", "error");
+            return;
+        }
+
+        loginResponse.textContent = "Login submitted. We'll take it from here.";
+        loginResponse.classList.add("show");
+        loginForm.reset();
+        requiredLoginFields.forEach((field) => field.classList.remove("invalid"));
+        setPasswordError("");
+    });
+
+    loginForm.addEventListener("input", (event) => {
+        if (event.target.classList.contains("field")) {
+            event.target.classList.toggle("invalid", !event.target.checkValidity());
+        }
+
+        if (event.target.name === "password") {
+            validatePassword();
+        }
+    });
+
+    const STORAGE_KEY = "jobBoardJobs";
+    const jobJsonForm = document.getElementById("job-json-form");
+    const saveJobsBtn = document.getElementById("save-jobs-btn");
+    const loadJobsBtn = document.getElementById("load-jobs-btn");
+    const simulateJsonBtn = document.getElementById("simulate-json-btn");
+    const clearJobsBtn = document.getElementById("clear-jobs-btn");
+    const jobsTableBody = document.getElementById("jobs-table-body");
+    const jobsDropdown = document.getElementById("jobs-dropdown");
+    const jsonPreview = document.getElementById("json-preview");
+    const sentJsonPreview = document.getElementById("sent-json-preview");
+    const selectedJobPreview = document.getElementById("selected-job-preview");
+    const jsonStatus = document.getElementById("json-status");
+
+    let jobs = [];
+
+    const setJsonStatus = (message, isError = false) => {
+        jsonStatus.textContent = message;
+        jsonStatus.classList.toggle("error", isError);
+    };
+
+    const renderJobsTable = (jobList) => {
+        jobsTableBody.innerHTML = "";
+
+        if (!jobList.length) {
+            jobsTableBody.innerHTML = "<tr><td colspan='4'>No job data available.</td></tr>";
+            return;
+        }
+
+        jobList.forEach((job) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${job.title}</td>
+                <td>${job.company}</td>
+                <td>${job.location}</td>
+                <td>${job.type}</td>
+            `;
+            jobsTableBody.appendChild(row);
+        });
+    };
+
+    const renderJobsDropdown = (jobList) => {
+        jobsDropdown.innerHTML = "<option value=''>Select a job from received JSON data</option>";
+
+        jobList.forEach((job, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = `${job.title} - ${job.company}`;
+            jobsDropdown.appendChild(option);
+        });
+    };
+
+    const updateJsonPreview = (jobList) => {
+        jsonPreview.textContent = JSON.stringify(jobList, null, 2);
+    };
+
+    const updateSentJsonPreview = (payload) => {
+        sentJsonPreview.textContent = JSON.stringify(payload, null, 2);
+    };
+
+    const updateSelectedJobPreview = (job) => {
+        if (!job) {
+            selectedJobPreview.textContent = "Select a job from dropdown to view details.";
+            return;
+        }
+        selectedJobPreview.textContent = JSON.stringify(job, null, 2);
+    };
+
+    const renderAll = (jobList) => {
+        renderJobsTable(jobList);
+        renderJobsDropdown(jobList);
+        updateJsonPreview(jobList);
+        if (!jobList.length) updateSelectedJobPreview(null);
+    };
+
+    const safeParseJobs = (raw) => {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+    };
+
+    const fakeApiSendReceive = (jsonPayload) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const requestData = safeParseJobs(jsonPayload);
+                const response = {
+                    message: "JSON data received from simulated server.",
+                    receivedAt: new Date().toISOString(),
+                    jobs: requestData
+                };
+                resolve(JSON.stringify(response));
+            }, 900);
+        });
+    };
+
+    jobJsonForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(jobJsonForm);
+        const job = {
+            title: String(formData.get("title") || "").trim(),
+            company: String(formData.get("company") || "").trim(),
+            location: String(formData.get("location") || "").trim(),
+            type: String(formData.get("type") || "").trim()
+        };
+
+        if (!job.title || !job.company || !job.location || !job.type) {
+            setJsonStatus("Please fill all job fields before adding.", true);
+            return;
+        }
+
+        jobs.push(job);
+        renderAll(jobs);
+        setJsonStatus("Job added to in-memory JSON list.");
+        jobJsonForm.reset();
+    });
+
+    saveJobsBtn.addEventListener("click", () => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs));
+        setJsonStatus("JSON data stored successfully in localStorage.");
+    });
+
+    loadJobsBtn.addEventListener("click", () => {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+            jobs = [];
+            renderAll(jobs);
+            setJsonStatus("No saved JSON found in localStorage.");
+            return;
+        }
+
+        try {
+            jobs = safeParseJobs(stored);
+            renderAll(jobs);
+            setJsonStatus("JSON data retrieved from localStorage.");
+        } catch (error) {
+            setJsonStatus("Stored JSON is corrupted. Clear and save again.", true);
+        }
+    });
+
+    simulateJsonBtn.addEventListener("click", async () => {
+        try {
+            setJsonStatus("Sending JSON data to simulated server...");
+            const requestJson = JSON.stringify(jobs);
+            updateSentJsonPreview(jobs);
+            const responseJson = await fakeApiSendReceive(requestJson);
+            const responseData = JSON.parse(responseJson);
+            const receivedJobs = Array.isArray(responseData.jobs) ? responseData.jobs : [];
+            jobs = receivedJobs;
+            renderAll(receivedJobs);
+            setJsonStatus("JSON received and displayed in table + dropdown.");
+        } catch (error) {
+            setJsonStatus("Simulation failed. Please try again.", true);
+        }
+    });
+
+    clearJobsBtn.addEventListener("click", () => {
+        jobs = [];
+        localStorage.removeItem(STORAGE_KEY);
+        renderAll(jobs);
+        updateSentJsonPreview([]);
+        setJsonStatus("Stored JSON and current list cleared.");
+    });
+
+    jobsDropdown.addEventListener("change", (event) => {
+        const selectedIndex = Number(event.target.value);
+        if (Number.isNaN(selectedIndex) || !jobs[selectedIndex]) {
+            updateSelectedJobPreview(null);
+            return;
+        }
+        updateSelectedJobPreview(jobs[selectedIndex]);
+    });
+
+    (() => {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                jobs = safeParseJobs(stored);
+                setJsonStatus("Auto-loaded JSON from localStorage on page open.");
+            } catch (error) {
+                jobs = [];
+                setJsonStatus("Saved JSON was invalid. Starting with empty list.", true);
+            }
+        }
+        renderAll(jobs);
+        updateSentJsonPreview([]);
+    })();
+</script>
+
+</body>
+</html>
