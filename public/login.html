@@ -13,7 +13,6 @@
             flex-direction: column;
         }
 
-        /* ===== NAVBAR ===== */
         .navbar {
             background: white;
             padding: 15px 40px;
@@ -35,17 +34,6 @@
             display: block;
             overflow: visible;
             animation: logo-float 4s ease-in-out infinite;
-        }
-
-        .logo-text {
-            margin: 0;
-            font-size: 18px;
-            letter-spacing: 0.6px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #1e6fd9, #f39b2f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
 
         .logo .pin {
@@ -151,18 +139,22 @@
             border-radius: 4px;
         }
 
-        /* ===== FORM SECTION ===== */
-        .form-container {
-            max-width: 640px;
-            width: min(640px, calc(100% - 48px));
+        .form-container,
+        .hub-preview {
+            max-width: 900px;
+            width: min(900px, calc(100% - 48px));
             box-sizing: border-box;
             background: rgba(255, 255, 255, 0.96);
-            margin: 50px auto;
+            margin: 40px auto 0;
             padding: 34px;
             border-radius: 16px;
             box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
             border: 1px solid rgba(148, 163, 184, 0.25);
             backdrop-filter: blur(6px);
+        }
+
+        .form-container {
+            max-width: 640px;
         }
 
         .form-container h1 {
@@ -273,164 +265,89 @@
             color: #c62828;
         }
 
-        /* ===== JSON ASSIGNMENT LAB ===== */
-        .json-lab {
-            max-width: 900px;
-            width: min(900px, calc(100% - 48px));
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.96);
-            margin: 0 auto 40px;
-            padding: 28px;
-            border-radius: 16px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+        .hub-preview {
+            margin: 24px auto 40px;
         }
 
-        .json-lab h2 {
-            margin: 0 0 6px;
+        .hub-preview h2 {
+            margin: 0 0 8px;
             color: #1e63d5;
         }
 
-        .json-lab p {
-            margin: 0 0 18px;
+        .hub-preview p {
+            margin: 0;
             color: #475569;
-        }
-
-        .before-after {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 0 0 14px;
-        }
-
-        .before-after .card {
-            border: 1px solid #dbeafe;
-            background: #f8fbff;
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-size: 13px;
-            color: #334155;
-        }
-
-        .before-after .card strong {
-            display: inline-block;
-            margin-bottom: 5px;
-            color: #1e3a8a;
-        }
-
-        .json-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .json-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .json-actions button {
-            width: auto;
-            padding: 10px 14px;
-            font-size: 14px;
-        }
-
-        .json-status {
-            min-height: 20px;
-            color: #1e63d5;
-            font-size: 14px;
-            margin-bottom: 14px;
-        }
-
-        .json-status.error {
-            color: #c62828;
-        }
-
-        .json-output {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 16px;
-        }
-
-        .json-output table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .json-output th,
-        .json-output td {
-            border: 1px solid #e2e8f0;
-            padding: 8px;
             text-align: left;
         }
 
-        .json-output th {
-            background: #eff6ff;
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 18px 0 20px;
+        }
+
+        .hub-card {
+            border: 1px solid #dbeafe;
+            background: #f8fbff;
+            border-radius: 12px;
+            padding: 14px;
+            color: #334155;
+        }
+
+        .hub-card strong {
+            display: block;
+            margin-bottom: 6px;
             color: #1e3a8a;
         }
 
-        .json-side {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .hub-link {
+            display: inline-block;
+            text-decoration: none;
+            background: #1e63d5;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
         }
 
-        .json-side select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5f5;
-            border-radius: 8px;
-        }
-
-        .json-side pre {
-            margin: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-            padding: 12px;
-            border-radius: 8px;
-            overflow-x: auto;
-            min-height: 130px;
-            font-size: 12px;
-        }
-
-        .json-side .mini-title {
-            font-size: 12px;
-            color: #475569;
-            margin: 0 0 -6px;
-        }
-
-        @media (max-width: 768px) {
-            .before-after {
-                grid-template-columns: 1fr;
-            }
-
-            .json-output {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== FOOTER ===== */
         footer {
             text-align: center;
             padding: 15px;
             background: white;
             color: #666;
-            margin-top: 40px;
-            border-top: 1px solid #ddd;
             margin-top: auto;
+            border-top: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 24px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-links a {
+                margin: 0;
+            }
+
+            .form-container,
+            .hub-preview {
+                width: min(100% - 32px, 900px);
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
 <div class="navbar">
     <div class="logo">
         <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
@@ -461,12 +378,12 @@
         <a href="./home.html">Home</a>
         <a href="#">Jobs</a>
         <a href="#">Companies</a>
+        <a href="./job-data-hub.html">Job Data Hub</a>
         <a href="./login.html">Login</a>
         <a href="./forms.html" class="register-btn">Register</a>
     </div>
 </div>
 
-<!-- ===== FORM ===== -->
 <div class="form-container">
     <h1>Login</h1>
     <p>Welcome back. Please sign in to continue.</p>
@@ -487,69 +404,28 @@
     </form>
 </div>
 
-<!-- ===== JSON ASSIGNMENT LAB ===== -->
-<section class="json-lab" aria-labelledby="json-lab-heading">
-    <h2 id="json-lab-heading">Job Data Hub</h2>
-    <p>Manage job listings data: save and load JSON, simulate data exchange, and view jobs in table and dropdown formats.</p>
-    <div class="before-after">
-        <div class="card">
-            <strong>Core Features:</strong><br>
-            Store and retrieve jobs with localStorage, keeping data available even after refresh.
+<section class="hub-preview" aria-labelledby="hub-preview-heading">
+    <h2 id="hub-preview-heading">Job Data Hub</h2>
+    <p>Use the dedicated applicant dashboard to review search history, saved applications, profile details, and areas of interest for a particular applicant.</p>
+    <div class="hub-grid">
+        <div class="hub-card">
+            <strong>Search History</strong>
+            Review the latest job searches by role, location, and search mode.
         </div>
-        <div class="card">
-            <strong>Live Data View:</strong><br>
-            Simulate send/receive flow and render the received JSON in both the table and job selector.
+        <div class="hub-card">
+            <strong>Saved Applications</strong>
+            See recent applications, their status, and submission time.
         </div>
-    </div>
-
-    <form id="job-json-form" novalidate>
-        <div class="json-grid">
-            <input type="text" name="title" placeholder="Job Title (e.g., Frontend Developer)" required>
-            <input type="text" name="company" placeholder="Company (e.g., Infosys)" required>
-            <input type="text" name="location" placeholder="Location (e.g., Bengaluru)" required>
-            <input type="text" name="type" placeholder="Type (e.g., Full-time)" required>
-        </div>
-        <div class="json-actions">
-            <button type="submit">Add Job To JSON List</button>
-            <button type="button" id="save-jobs-btn">Store JSON (localStorage)</button>
-            <button type="button" id="load-jobs-btn">Retrieve JSON (localStorage)</button>
-            <button type="button" id="simulate-json-btn">Simulate Send & Receive JSON</button>
-            <button type="button" id="clear-jobs-btn">Clear Stored Jobs</button>
-        </div>
-    </form>
-
-    <div id="json-status" class="json-status" aria-live="polite"></div>
-
-    <div class="json-output">
-        <div>
-            <table aria-label="Received jobs table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody id="jobs-table-body"></tbody>
-            </table>
-        </div>
-        <div class="json-side">
-            <select id="jobs-dropdown" aria-label="Jobs dropdown list">
-                <option value="">Select a job from received JSON data</option>
-            </select>
-            <pre id="selected-job-preview">Select a job from dropdown to view details.</pre>
-            <p class="mini-title">Sent JSON payload:</p>
-            <pre id="sent-json-preview">[]</pre>
-            <p class="mini-title">Received JSON payload:</p>
-            <pre id="json-preview">[]</pre>
+        <div class="hub-card">
+            <strong>Applicant Details</strong>
+            Keep profile details and top areas of interest in one place.
         </div>
     </div>
+    <a class="hub-link" href="./job-data-hub.html">Open Job Data Hub</a>
 </section>
 
-<!-- ===== FOOTER ===== -->
 <footer>
-    © 2026 JobFinder. All rights reserved.
+    &copy; 2026 JobFinder. All rights reserved.
 </footer>
 
 <script>
@@ -622,192 +498,6 @@
             validatePassword();
         }
     });
-
-    const STORAGE_KEY = "jobBoardJobs";
-    const jobJsonForm = document.getElementById("job-json-form");
-    const saveJobsBtn = document.getElementById("save-jobs-btn");
-    const loadJobsBtn = document.getElementById("load-jobs-btn");
-    const simulateJsonBtn = document.getElementById("simulate-json-btn");
-    const clearJobsBtn = document.getElementById("clear-jobs-btn");
-    const jobsTableBody = document.getElementById("jobs-table-body");
-    const jobsDropdown = document.getElementById("jobs-dropdown");
-    const jsonPreview = document.getElementById("json-preview");
-    const sentJsonPreview = document.getElementById("sent-json-preview");
-    const selectedJobPreview = document.getElementById("selected-job-preview");
-    const jsonStatus = document.getElementById("json-status");
-
-    let jobs = [];
-
-    const setJsonStatus = (message, isError = false) => {
-        jsonStatus.textContent = message;
-        jsonStatus.classList.toggle("error", isError);
-    };
-
-    const renderJobsTable = (jobList) => {
-        jobsTableBody.innerHTML = "";
-
-        if (!jobList.length) {
-            jobsTableBody.innerHTML = "<tr><td colspan='4'>No job data available.</td></tr>";
-            return;
-        }
-
-        jobList.forEach((job) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${job.title}</td>
-                <td>${job.company}</td>
-                <td>${job.location}</td>
-                <td>${job.type}</td>
-            `;
-            jobsTableBody.appendChild(row);
-        });
-    };
-
-    const renderJobsDropdown = (jobList) => {
-        jobsDropdown.innerHTML = "<option value=''>Select a job from received JSON data</option>";
-
-        jobList.forEach((job, index) => {
-            const option = document.createElement("option");
-            option.value = String(index);
-            option.textContent = `${job.title} - ${job.company}`;
-            jobsDropdown.appendChild(option);
-        });
-    };
-
-    const updateJsonPreview = (jobList) => {
-        jsonPreview.textContent = JSON.stringify(jobList, null, 2);
-    };
-
-    const updateSentJsonPreview = (payload) => {
-        sentJsonPreview.textContent = JSON.stringify(payload, null, 2);
-    };
-
-    const updateSelectedJobPreview = (job) => {
-        if (!job) {
-            selectedJobPreview.textContent = "Select a job from dropdown to view details.";
-            return;
-        }
-        selectedJobPreview.textContent = JSON.stringify(job, null, 2);
-    };
-
-    const renderAll = (jobList) => {
-        renderJobsTable(jobList);
-        renderJobsDropdown(jobList);
-        updateJsonPreview(jobList);
-        if (!jobList.length) updateSelectedJobPreview(null);
-    };
-
-    const safeParseJobs = (raw) => {
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) return [];
-        return parsed;
-    };
-
-    const fakeApiSendReceive = (jsonPayload) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const requestData = safeParseJobs(jsonPayload);
-                const response = {
-                    message: "JSON data received from simulated server.",
-                    receivedAt: new Date().toISOString(),
-                    jobs: requestData
-                };
-                resolve(JSON.stringify(response));
-            }, 900);
-        });
-    };
-
-    jobJsonForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = new FormData(jobJsonForm);
-        const job = {
-            title: String(formData.get("title") || "").trim(),
-            company: String(formData.get("company") || "").trim(),
-            location: String(formData.get("location") || "").trim(),
-            type: String(formData.get("type") || "").trim()
-        };
-
-        if (!job.title || !job.company || !job.location || !job.type) {
-            setJsonStatus("Please fill all job fields before adding.", true);
-            return;
-        }
-
-        jobs.push(job);
-        renderAll(jobs);
-        setJsonStatus("Job added to in-memory JSON list.");
-        jobJsonForm.reset();
-    });
-
-    saveJobsBtn.addEventListener("click", () => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs));
-        setJsonStatus("JSON data stored successfully in localStorage.");
-    });
-
-    loadJobsBtn.addEventListener("click", () => {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            jobs = [];
-            renderAll(jobs);
-            setJsonStatus("No saved JSON found in localStorage.");
-            return;
-        }
-
-        try {
-            jobs = safeParseJobs(stored);
-            renderAll(jobs);
-            setJsonStatus("JSON data retrieved from localStorage.");
-        } catch (error) {
-            setJsonStatus("Stored JSON is corrupted. Clear and save again.", true);
-        }
-    });
-
-    simulateJsonBtn.addEventListener("click", async () => {
-        try {
-            setJsonStatus("Sending JSON data to simulated server...");
-            const requestJson = JSON.stringify(jobs);
-            updateSentJsonPreview(jobs);
-            const responseJson = await fakeApiSendReceive(requestJson);
-            const responseData = JSON.parse(responseJson);
-            const receivedJobs = Array.isArray(responseData.jobs) ? responseData.jobs : [];
-            jobs = receivedJobs;
-            renderAll(receivedJobs);
-            setJsonStatus("JSON received and displayed in table + dropdown.");
-        } catch (error) {
-            setJsonStatus("Simulation failed. Please try again.", true);
-        }
-    });
-
-    clearJobsBtn.addEventListener("click", () => {
-        jobs = [];
-        localStorage.removeItem(STORAGE_KEY);
-        renderAll(jobs);
-        updateSentJsonPreview([]);
-        setJsonStatus("Stored JSON and current list cleared.");
-    });
-
-    jobsDropdown.addEventListener("change", (event) => {
-        const selectedIndex = Number(event.target.value);
-        if (Number.isNaN(selectedIndex) || !jobs[selectedIndex]) {
-            updateSelectedJobPreview(null);
-            return;
-        }
-        updateSelectedJobPreview(jobs[selectedIndex]);
-    });
-
-    (() => {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                jobs = safeParseJobs(stored);
-                setJsonStatus("Auto-loaded JSON from localStorage on page open.");
-            } catch (error) {
-                jobs = [];
-                setJsonStatus("Saved JSON was invalid. Starting with empty list.", true);
-            }
-        }
-        renderAll(jobs);
-        updateSentJsonPreview([]);
-    })();
 </script>
 
 </body>
