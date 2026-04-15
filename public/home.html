@@ -43,6 +43,7 @@
         <a href="#">Companies</a>
         <a href="#">About</a>
         <a href="#">Blog</a>
+        <a href="./job-data-hub.html">Job Data Hub</a>
         <a href="./login.html" class="login">Login</a>
         <a href="./forms.html"><button class="btn">Register</button></a>
     </div>
@@ -69,6 +70,15 @@
             <p id="search-count">Searches this session: 0</p>
         </div>
     </div>
+</section>
+
+<!-- ===== INTERVIEW PREP CTA ===== -->
+<section class="prep-cta-wrap">
+    <a href="./interview-prep.html" class="prep-cta" aria-label="Open interview prep page">
+        <span class="prep-cta-label">Interview Prep Extension</span>
+        <strong>Start Preliminary Interview Prep For Frontend, Backend, Database, GIS, DevOps And More</strong>
+        <span class="prep-cta-copy">Answer a few quick questions and get a focused preparation path before you apply.</span>
+    </a>
 </section>
 
 <!-- ===== FEATURED JOBS ===== -->
@@ -209,6 +219,7 @@
 </div>
 
 <script>
+    const SEARCH_HISTORY_KEY = "jobBoardSearchHistory";
     const searchForm = document.getElementById("job-search-form");
     const locationInput = document.getElementById("location-input");
     const keywordInput = document.getElementById("keyword-input");
@@ -271,6 +282,21 @@
         window.location.href = `jobs-map.html?${params.toString()}`;
     };
 
+    const storeSearchHistory = (session) => {
+        const previous = JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || "[]");
+        const nextHistory = [
+            {
+                keyword: session.keyword,
+                location: session.location,
+                searchMode: session.searchMode,
+                searchedAt: session.createdAt.toISOString()
+            },
+            ...previous
+        ].slice(0, 8);
+
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(nextHistory));
+    };
+
     searchForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -278,6 +304,7 @@
         const keyword = keywordInput.value.trim();
         const searchSession = new SearchSession(keyword, location, "Location and keyword search");
         const latestSearch = trackSearch(searchSession);
+        storeSearchHistory(searchSession);
 
         // call/apply/bind: reuse one UI updater with different contexts/arguments.
         updateSearchStatus.call(
