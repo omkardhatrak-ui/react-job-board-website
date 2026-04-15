@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Prep | JobFinder</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="#">Jobs</a>
+        <a href="#">Companies</a>
+        <a href="./job-data-hub.html">Job Data Hub</a>
+        <a href="./login.html" class="login">Login</a>
+        <a href="./forms.html"><button class="btn">Register</button></a>
+    </div>
+</nav>
+
+<main class="prep-page">
+    <section class="prep-hero">
+        <div class="prep-hero-copy">
+            <p class="prep-eyebrow">Scenario 4 Extension</p>
+            <h1>Interview Prep</h1>
+            <p>Pick your target role, experience level, and focus area. We will turn those preliminary answers into a short prep direction before you move into timed questions later.</p>
+        </div>
+
+        <aside class="prep-hero-side">
+            <div class="prep-stat">
+                <span>Tracks</span>
+                <strong>Frontend, Backend, Database, GIS, DevOps</strong>
+            </div>
+            <div class="prep-stat">
+                <span>Current Step</span>
+                <strong>Preliminary Screening Questions</strong>
+            </div>
+            <div class="prep-stat">
+                <span>Outcome</span>
+                <strong>Custom revision direction for your next interview round</strong>
+            </div>
+        </aside>
+    </section>
+
+    <section class="prep-panel">
+        <div class="panel-heading">
+            <h2>Tell Us What Role You Want</h2>
+            <p>These quick questions help decide what kind of practice set should come next.</p>
+        </div>
+
+        <form id="prep-form" class="prep-form" novalidate>
+            <div class="prep-quick-grid">
+                <div class="prep-field">
+                    <label for="role-track">Target role</label>
+                    <select id="role-track" name="roleTrack" required>
+                        <option value="Frontend Developer">Frontend Developer</option>
+                        <option value="Backend Developer">Backend Developer</option>
+                        <option value="Database Engineer">Database Engineer</option>
+                        <option value="GIS Analyst">GIS Analyst</option>
+                        <option value="DevOps Engineer">DevOps Engineer</option>
+                        <option value="Full Stack Developer">Full Stack Developer</option>
+                    </select>
+                </div>
+
+                <div class="prep-field">
+                    <label for="experience-level">Experience level</label>
+                    <select id="experience-level" name="experienceLevel" required>
+                        <option value="Fresher">Fresher</option>
+                        <option value="0-2 Years">0-2 Years</option>
+                        <option value="2-4 Years">2-4 Years</option>
+                        <option value="4+ Years">4+ Years</option>
+                    </select>
+                </div>
+
+                <div class="prep-field">
+                    <label for="focus-area">Main focus area</label>
+                    <select id="focus-area" name="focusArea" required>
+                        <option value="Core Concepts">Core Concepts</option>
+                        <option value="Projects">Projects</option>
+                        <option value="Problem Solving">Problem Solving</option>
+                        <option value="Tools And Workflow">Tools And Workflow</option>
+                        <option value="System Design">System Design</option>
+                    </select>
+                </div>
+
+                <div class="prep-field">
+                    <label for="interview-style">Interview style</label>
+                    <select id="interview-style" name="interviewStyle" required>
+                        <option value="Technical Round">Technical Round</option>
+                        <option value="HR Round">HR Round</option>
+                        <option value="Manager Round">Manager Round</option>
+                        <option value="Mixed Round">Mixed Round</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="prep-field">
+                <label for="strength-skill">Your strongest skill right now</label>
+                <input id="strength-skill" name="strengthSkill" type="text" placeholder="Example: React hooks, Node APIs, SQL joins, ArcGIS mapping" required>
+            </div>
+
+            <div class="prep-field">
+                <label for="weak-skill">What do you want extra practice in?</label>
+                <input id="weak-skill" name="weakSkill" type="text" placeholder="Example: State management, indexing, GeoJSON, CI/CD pipelines" required>
+            </div>
+
+            <div class="prep-actions">
+                <button class="btn" type="submit">Generate Prep Direction</button>
+                <button class="btn btn-secondary" type="button" id="reset-prep-btn">Reset Answers</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="prep-panel" id="prep-result-panel">
+        <div class="panel-heading">
+            <h2>Your Prep Snapshot</h2>
+            <p class="prep-result-copy">Submit the preliminary questions to see your role-based preparation summary.</p>
+        </div>
+
+        <div class="prep-result-grid">
+            <article class="prep-result-card">
+                <span>Role Track</span>
+                <strong id="result-role">Not chosen yet</strong>
+            </article>
+            <article class="prep-result-card">
+                <span>Priority Topic</span>
+                <strong id="result-priority">Not chosen yet</strong>
+            </article>
+            <article class="prep-result-card">
+                <span>Recommended Round</span>
+                <strong id="result-round">Not chosen yet</strong>
+            </article>
+        </div>
+
+        <p id="prep-summary" class="prep-result-copy">You have not answered the preliminary questions yet.</p>
+        <ul id="prep-advice" class="prep-bullets">
+            <li>Choose a target role to start building a custom interview path.</li>
+        </ul>
+    </section>
+</main>
+
+<footer class="copyright">
+    &copy; 2026 JobFinder. All rights reserved.
+</footer>
+
+<script>
+    const PREP_STORAGE_KEY = "jobBoardInterviewPrep";
+    const prepForm = document.getElementById("prep-form");
+    const resetPrepBtn = document.getElementById("reset-prep-btn");
+    const resultRole = document.getElementById("result-role");
+    const resultPriority = document.getElementById("result-priority");
+    const resultRound = document.getElementById("result-round");
+    const prepSummary = document.getElementById("prep-summary");
+    const prepAdvice = document.getElementById("prep-advice");
+
+    const rolePlaybooks = {
+        "Frontend Developer": ["Revise components, props, state, hooks, accessibility, and API rendering.", "Be ready to explain one UI project end-to-end.", "Practice DOM, event handling, responsive layout, and performance questions."],
+        "Backend Developer": ["Review APIs, authentication, middleware, error handling, and database flow.", "Prepare to describe how your server scales and validates data.", "Practice Node, Java, or Python service questions based on your stack."],
+        "Database Engineer": ["Revise joins, normalization, indexing, transactions, and query optimization.", "Expect schema design and SQL debugging questions.", "Prepare examples where you improved performance or data quality."],
+        "GIS Analyst": ["Revise coordinate systems, map layers, spatial joins, and GeoJSON workflows.", "Practice real examples using ArcGIS, QGIS, or map APIs.", "Prepare to explain how you interpret geospatial data for business decisions."],
+        "DevOps Engineer": ["Review CI/CD, containers, cloud deployment, monitoring, and incident response.", "Be ready to explain automation pipelines and release flow.", "Practice Linux, networking, and infrastructure reliability questions."],
+        "Full Stack Developer": ["Prepare both UI architecture and backend integration examples.", "Expect questions on state flow, APIs, auth, and deployment.", "Practice tradeoffs between frontend speed and backend maintainability."]
+    };
+
+    const buildSummary = (answers) => {
+        return `For a ${answers.roleTrack} ${answers.interviewStyle.toLowerCase()}, prioritize ${answers.focusArea.toLowerCase()} and strengthen ${answers.weakSkill}. Your current strength in ${answers.strengthSkill} should be turned into one confident project story.`;
+    };
+
+    const renderAdvice = (answers) => {
+        const playbook = rolePlaybooks[answers.roleTrack] || rolePlaybooks["Full Stack Developer"];
+        prepAdvice.innerHTML = "";
+
+        [
+            playbook[0],
+            playbook[1],
+            `${answers.experienceLevel} candidates are usually asked to justify ${answers.focusArea.toLowerCase()} with practical examples.`,
+            `Spend extra revision time on ${answers.weakSkill} before the next round.`,
+            `Use ${answers.strengthSkill} as your anchor topic when the interviewer asks about strengths.`
+        ].forEach((tip) => {
+            const item = document.createElement("li");
+            item.textContent = tip;
+            prepAdvice.appendChild(item);
+        });
+    };
+
+    const renderResult = (answers) => {
+        resultRole.textContent = answers.roleTrack;
+        resultPriority.textContent = `${answers.focusArea} + ${answers.weakSkill}`;
+        resultRound.textContent = answers.interviewStyle;
+        prepSummary.textContent = buildSummary(answers);
+        renderAdvice(answers);
+    };
+
+    const readStoredPrep = () => {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(PREP_STORAGE_KEY) || "null");
+            return parsed && typeof parsed === "object" ? parsed : null;
+        } catch {
+            return null;
+        }
+    };
+
+    const applyStoredValues = (answers) => {
+        if (!answers) return;
+        prepForm.elements["roleTrack"].value = answers.roleTrack;
+        prepForm.elements["experienceLevel"].value = answers.experienceLevel;
+        prepForm.elements["focusArea"].value = answers.focusArea;
+        prepForm.elements["interviewStyle"].value = answers.interviewStyle;
+        prepForm.elements["strengthSkill"].value = answers.strengthSkill;
+        prepForm.elements["weakSkill"].value = answers.weakSkill;
+        renderResult(answers);
+    };
+
+    prepForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!prepForm.checkValidity()) {
+            prepSummary.textContent = "Please answer all the preliminary questions first.";
+            return;
+        }
+
+        const answers = {
+            roleTrack: prepForm.elements["roleTrack"].value,
+            experienceLevel: prepForm.elements["experienceLevel"].value,
+            focusArea: prepForm.elements["focusArea"].value,
+            interviewStyle: prepForm.elements["interviewStyle"].value,
+            strengthSkill: prepForm.elements["strengthSkill"].value.trim(),
+            weakSkill: prepForm.elements["weakSkill"].value.trim()
+        };
+
+        localStorage.setItem(PREP_STORAGE_KEY, JSON.stringify(answers));
+        renderResult(answers);
+    });
+
+    resetPrepBtn.addEventListener("click", () => {
+        prepForm.reset();
+        localStorage.removeItem(PREP_STORAGE_KEY);
+        resultRole.textContent = "Not chosen yet";
+        resultPriority.textContent = "Not chosen yet";
+        resultRound.textContent = "Not chosen yet";
+        prepSummary.textContent = "You have not answered the preliminary questions yet.";
+        prepAdvice.innerHTML = "<li>Choose a target role to start building a custom interview path.</li>";
+    });
+
+    applyStoredValues(readStoredPrep());
+</script>
+
+</body>
+</html>

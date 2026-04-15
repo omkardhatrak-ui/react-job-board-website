@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Data Hub | JobFinder</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="#">Jobs</a>
+        <a href="#">Companies</a>
+        <a href="./job-data-hub.html">Job Data Hub</a>
+        <a href="./login.html" class="login">Login</a>
+        <a href="./forms.html"><button class="btn">Register</button></a>
+    </div>
+</nav>
+
+<main class="hub-page">
+    <section class="hub-hero">
+        <div>
+            <p class="hub-eyebrow">Applicant Workspace</p>
+            <h1>Job Data Hub</h1>
+            <p class="hub-intro">Track a candidate's search history, saved applications, profile details, and areas of interest in one dedicated page.</p>
+        </div>
+        <div class="hub-summary-cards">
+            <article class="summary-card">
+                <span>Total Searches</span>
+                <strong id="summary-searches">0</strong>
+            </article>
+            <article class="summary-card">
+                <span>Total Applications</span>
+                <strong id="summary-applications">0</strong>
+            </article>
+            <article class="summary-card">
+                <span>Top Interest</span>
+                <strong id="summary-interest">Not set</strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="hub-layout">
+        <article class="hub-panel">
+            <div class="panel-heading">
+                <h2>Applicant Profile</h2>
+                <p>Details for the selected applicant and their latest preferences.</p>
+            </div>
+            <div id="profile-grid" class="profile-grid"></div>
+        </article>
+
+        <article class="hub-panel">
+            <div class="panel-heading">
+                <h2>Areas of Interest</h2>
+                <p>Top focus areas and a JSON snapshot of the current applicant profile.</p>
+            </div>
+            <div id="interest-tags" class="interest-tags"></div>
+            <pre id="profile-json-preview" class="json-preview">No applicant profile available yet.</pre>
+        </article>
+
+        <article class="hub-panel">
+            <div class="panel-heading">
+                <h2>Job Search History</h2>
+                <p>Recent searches coming from the home page experience.</p>
+            </div>
+            <div id="search-history-list" class="activity-list"></div>
+        </article>
+
+        <article class="hub-panel">
+            <div class="panel-heading">
+                <h2>Saved Applications</h2>
+                <p>Latest applications saved from the registration form.</p>
+            </div>
+            <div class="table-wrap">
+                <table class="hub-table" aria-label="Saved applications table">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Company</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applications-table-body"></tbody>
+                </table>
+            </div>
+        </article>
+    </section>
+
+    <section class="hub-panel actions-panel">
+        <div class="panel-heading">
+            <h2>Data Controls</h2>
+            <p>Refresh the hub or clear all stored applicant data from this browser.</p>
+        </div>
+        <div class="hub-actions">
+            <button class="btn" id="refresh-hub-btn" type="button">Refresh Hub Data</button>
+            <button class="btn btn-secondary" id="clear-hub-btn" type="button">Clear Stored Data</button>
+        </div>
+        <p id="hub-status" class="hub-status" aria-live="polite"></p>
+    </section>
+</main>
+
+<footer class="copyright">
+    &copy; 2026 JobFinder. All rights reserved.
+</footer>
+
+<script>
+    const SEARCH_HISTORY_KEY = "jobBoardSearchHistory";
+    const APPLICANT_PROFILE_KEY = "jobBoardApplicantProfile";
+    const APPLICATIONS_KEY = "jobBoardApplications";
+
+    const summarySearches = document.getElementById("summary-searches");
+    const summaryApplications = document.getElementById("summary-applications");
+    const summaryInterest = document.getElementById("summary-interest");
+    const profileGrid = document.getElementById("profile-grid");
+    const interestTags = document.getElementById("interest-tags");
+    const searchHistoryList = document.getElementById("search-history-list");
+    const applicationsTableBody = document.getElementById("applications-table-body");
+    const profileJsonPreview = document.getElementById("profile-json-preview");
+    const hubStatus = document.getElementById("hub-status");
+    const refreshHubBtn = document.getElementById("refresh-hub-btn");
+    const clearHubBtn = document.getElementById("clear-hub-btn");
+
+    const defaultProfile = {
+        fullName: "Guest Applicant",
+        email: "No email saved yet",
+        phone: "No phone saved yet",
+        desiredRole: "General Applicant",
+        preferredLocation: "Flexible",
+        experienceLevel: "New Applicant",
+        interests: ["Frontend", "Backend", "Remote"],
+        updatedAt: null
+    };
+
+    const getStoredArray = (key) => {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    };
+
+    const getStoredProfile = () => {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(APPLICANT_PROFILE_KEY) || "null");
+            return parsed && typeof parsed === "object" ? { ...defaultProfile, ...parsed } : defaultProfile;
+        } catch {
+            return defaultProfile;
+        }
+    };
+
+    const formatDateTime = (value) => {
+        if (!value) return "Not available";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "Not available" : date.toLocaleString();
+    };
+
+    const setHubStatus = (message) => {
+        hubStatus.textContent = message;
+    };
+
+    const renderProfile = (profile) => {
+        const profileItems = [
+            ["Full Name", profile.fullName],
+            ["Email", profile.email],
+            ["Phone", profile.phone],
+            ["Desired Role", profile.desiredRole],
+            ["Preferred Location", profile.preferredLocation],
+            ["Experience Level", profile.experienceLevel],
+            ["Last Updated", formatDateTime(profile.updatedAt)]
+        ];
+
+        profileGrid.innerHTML = "";
+        profileItems.forEach(([label, value]) => {
+            const card = document.createElement("div");
+            card.className = "profile-item";
+            card.innerHTML = `<span>${label}</span><strong>${value}</strong>`;
+            profileGrid.appendChild(card);
+        });
+
+        interestTags.innerHTML = "";
+        profile.interests.forEach((interest) => {
+            const chip = document.createElement("span");
+            chip.className = "interest-chip";
+            chip.textContent = interest;
+            interestTags.appendChild(chip);
+        });
+
+        profileJsonPreview.textContent = JSON.stringify(profile, null, 2);
+        summaryInterest.textContent = profile.interests[0] || "Not set";
+    };
+
+    const renderSearchHistory = (history) => {
+        searchHistoryList.innerHTML = "";
+
+        if (!history.length) {
+            searchHistoryList.innerHTML = '<div class="empty-state">No search history saved yet. Use the homepage search to populate this panel.</div>';
+            return;
+        }
+
+        history.forEach((entry) => {
+            const item = document.createElement("article");
+            item.className = "activity-item";
+            item.innerHTML = `
+                <strong>${entry.keyword || "All roles"}</strong>
+                <span>Location: ${entry.location || "Current location"}</span>
+                <span>Mode: ${entry.searchMode || "Smart search"}</span>
+                <span>Searched: ${formatDateTime(entry.searchedAt)}</span>
+            `;
+            searchHistoryList.appendChild(item);
+        });
+    };
+
+    const renderApplications = (applications) => {
+        applicationsTableBody.innerHTML = "";
+
+        if (!applications.length) {
+            applicationsTableBody.innerHTML = "<tr><td colspan='5'>No saved applications yet.</td></tr>";
+            return;
+        }
+
+        applications.forEach((application) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${application.role || "General Applicant"}</td>
+                <td>${application.company || "Not set"}</td>
+                <td>${application.status || "Pending"}</td>
+                <td>${application.location || "Flexible"}</td>
+                <td>${formatDateTime(application.submittedAt)}</td>
+            `;
+            applicationsTableBody.appendChild(row);
+        });
+    };
+
+    const renderHub = () => {
+        const profile = getStoredProfile();
+        const history = getStoredArray(SEARCH_HISTORY_KEY);
+        const applications = getStoredArray(APPLICATIONS_KEY);
+
+        summarySearches.textContent = String(history.length);
+        summaryApplications.textContent = String(applications.length);
+        renderProfile(profile);
+        renderSearchHistory(history);
+        renderApplications(applications);
+        setHubStatus("Job Data Hub is synced with the latest local applicant data.");
+    };
+
+    refreshHubBtn.addEventListener("click", () => {
+        renderHub();
+    });
+
+    clearHubBtn.addEventListener("click", () => {
+        localStorage.removeItem(SEARCH_HISTORY_KEY);
+        localStorage.removeItem(APPLICANT_PROFILE_KEY);
+        localStorage.removeItem(APPLICATIONS_KEY);
+        renderHub();
+        setHubStatus("Stored applicant profile, search history, and applications were cleared.");
+    });
+
+    renderHub();
+</script>
+
+</body>
+</html>
