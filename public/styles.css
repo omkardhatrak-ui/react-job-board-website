@@ -264,10 +264,11 @@ body {
         linear-gradient(135deg, #163867, #7a65e2);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.28);
-    box-shadow: 0 18px 40px rgba(22, 56, 103, 0.18);
+    box-shadow: 0 14px 28px rgba(22, 56, 103, 0.14);
     position: relative;
     overflow: hidden;
-    animation: prep-cta-blink 2.4s ease-in-out infinite;
+    text-align: center;
+    animation: prep-cta-blink 3.2s ease-in-out infinite;
 }
 
 .prep-cta::before {
@@ -280,7 +281,7 @@ body {
 
 .prep-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 24px 50px rgba(22, 56, 103, 0.24);
+    box-shadow: 0 18px 34px rgba(22, 56, 103, 0.18);
 }
 
 .prep-cta > * {
@@ -315,11 +316,11 @@ body {
     0%,
     100% {
         opacity: 1;
-        box-shadow: 0 18px 40px rgba(22, 56, 103, 0.18);
+        box-shadow: 0 14px 28px rgba(22, 56, 103, 0.14);
     }
     50% {
-        opacity: 0.9;
-        box-shadow: 0 18px 46px rgba(93, 213, 255, 0.34);
+        opacity: 0.97;
+        box-shadow: 0 16px 32px rgba(93, 213, 255, 0.2);
     }
 }
 
@@ -799,6 +800,261 @@ body {
     margin-top: 8px;
 }
 
+.test-launcher {
+    padding: 18px;
+    border-radius: 16px;
+    background:
+        linear-gradient(145deg, rgba(242, 247, 255, 0.96), rgba(255, 255, 255, 0.98)),
+        radial-gradient(circle at top right, rgba(93, 213, 255, 0.14), rgba(93, 213, 255, 0));
+    border: 1px solid #d8e4f7;
+}
+
+.test-launcher-actions {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.live-test-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 190px;
+    text-decoration: none;
+}
+
+.live-test-btn[aria-disabled="true"] {
+    opacity: 0.62;
+    cursor: not-allowed;
+    pointer-events: auto;
+}
+
+.test-launcher-hint {
+    color: #5b6d89;
+    font-size: 14px;
+}
+
+.test-launcher-features {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.test-feature-card {
+    background: #f6f9ff;
+    border: 1px solid #d9e4f8;
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.test-feature-card span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5b6d89;
+    font-weight: 700;
+}
+
+.test-feature-card strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #183b72;
+    font-size: 18px;
+}
+
+.test-page {
+    padding: 36px 60px 60px;
+}
+
+.test-shell {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.test-panel,
+.test-sidebar {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(119, 143, 178, 0.25);
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    padding: 22px;
+}
+
+.test-sidebar {
+    position: sticky;
+    top: 24px;
+    display: grid;
+    gap: 18px;
+}
+
+.test-sidebar h1,
+.test-panel h2 {
+    margin: 0 0 10px;
+    color: #153a73;
+}
+
+.test-sidebar p,
+.test-panel p,
+.test-score-card p {
+    margin: 0;
+    color: #42526b;
+    line-height: 1.6;
+}
+
+.test-config {
+    display: grid;
+    gap: 14px;
+}
+
+.test-config label {
+    display: grid;
+    gap: 8px;
+    font-weight: 700;
+    color: #183b72;
+}
+
+.test-config select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cbd7ef;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: #ffffff;
+    font-size: 15px;
+    color: #18324f;
+    outline: none;
+}
+
+.test-config select:focus {
+    border-color: #5c8fe9;
+    box-shadow: 0 0 0 3px rgba(92, 143, 233, 0.16);
+}
+
+.timer-card,
+.test-score-card,
+.test-status-card {
+    border-radius: 14px;
+    padding: 16px;
+    background: #f6f9ff;
+    border: 1px solid #d9e4f8;
+}
+
+.timer-card strong,
+.test-status-card strong,
+.test-score-card strong {
+    display: block;
+    margin-top: 8px;
+    color: #183b72;
+    font-size: 24px;
+}
+
+.timer-card span,
+.test-status-card span,
+.test-score-card span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5b6d89;
+    font-weight: 700;
+}
+
+.test-panel-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.test-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.test-meta-pill {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #eef4ff;
+    border: 1px solid #d9e4f8;
+    color: #244a82;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.question-list {
+    display: grid;
+    gap: 16px;
+}
+
+.question-card {
+    border-radius: 16px;
+    border: 1px solid #d9e4f8;
+    background: #ffffff;
+    padding: 18px;
+    box-shadow: 0 8px 18px rgba(20, 42, 81, 0.05);
+}
+
+.question-card h3 {
+    margin: 0 0 14px;
+    color: #183b72;
+    font-size: 20px;
+}
+
+.question-options {
+    display: grid;
+    gap: 10px;
+}
+
+.question-option {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid #d8e4f7;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: #f9fbff;
+}
+
+.question-option input {
+    margin-top: 3px;
+}
+
+.question-option.correct {
+    border-color: #72c58f;
+    background: #edf9f1;
+}
+
+.question-option.incorrect {
+    border-color: #e39a9a;
+    background: #fff1f1;
+}
+
+.question-card.unanswered {
+    border-color: #e6ad67;
+    background: #fff9f1;
+}
+
+.test-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.test-note {
+    margin-top: 18px;
+    color: #5b6d89;
+    font-size: 14px;
+}
+
 .map-header h1 {
     margin: 0 0 10px;
     font-size: 38px;
@@ -1022,8 +1278,14 @@ body {
 
     .prep-hero,
     .prep-quick-grid,
-    .prep-result-grid {
+    .prep-result-grid,
+    .test-launcher-features,
+    .test-shell {
         grid-template-columns: 1fr;
+    }
+
+    .test-sidebar {
+        position: static;
     }
 
     .map-layout {
@@ -1088,6 +1350,10 @@ body {
     }
 
     .prep-page {
+        padding: 18px;
+    }
+
+    .test-page {
         padding: 18px;
     }
 }

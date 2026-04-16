@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Test | JobFinder</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5dd5ff"/>
+                    <stop offset="100%" stop-color="#9b7bff"/>
+                </linearGradient>
+            </defs>
+            <circle class="halo" cx="60" cy="50" r="26"/>
+            <circle class="pulse" cx="60" cy="50" r="18"/>
+            <path class="pin"
+                  d="M60 10
+                     C40 10, 30 30, 30 45
+                     C30 70, 60 95, 60 95
+                     C60 95, 90 70, 90 45
+                     C90 30, 80 10, 60 10Z"/>
+            <rect class="briefcase" x="50" y="38" width="20" height="14" rx="2"/>
+            <rect class="briefcase" x="56" y="34" width="8" height="4"/>
+            <text class="logo-text-svg" x="120" y="60">JobFinder</text>
+        </svg>
+    </div>
+
+    <div class="nav-links">
+        <a href="./home.html">Home</a>
+        <a href="./interview-prep.html">Interview Prep</a>
+        <a href="./job-data-hub.html">Job Data Hub</a>
+        <a href="./login.html" class="login">Login</a>
+        <a href="./forms.html"><button class="btn">Register</button></a>
+    </div>
+</nav>
+
+<main class="test-page">
+    <div class="test-shell">
+        <aside class="test-sidebar">
+            <div>
+                <p class="prep-eyebrow">Timed Practice</p>
+                <h1>Live Test Generator</h1>
+                <p>Choose the field and difficulty you want, then start a timed practice test with role-specific questions.</p>
+            </div>
+
+            <div class="test-config">
+                <label for="test-role">
+                    Field
+                    <select id="test-role" name="roleTrack">
+                        <option value="Frontend Developer">Frontend Developer</option>
+                        <option value="Backend Developer">Backend Developer</option>
+                        <option value="Database Engineer">Database Engineer</option>
+                        <option value="GIS Analyst">GIS Analyst</option>
+                        <option value="DevOps Engineer">DevOps Engineer</option>
+                        <option value="Full Stack Developer">Full Stack Developer</option>
+                    </select>
+                </label>
+
+                <label for="test-difficulty">
+                    Difficulty
+                    <select id="test-difficulty" name="difficulty">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </label>
+
+                <div class="prep-actions">
+                    <button id="start-test-btn" class="btn" type="button">Start Live Test</button>
+                    <a href="./interview-prep.html" class="btn btn-secondary live-test-btn">Back To Prep</a>
+                </div>
+            </div>
+
+            <div class="timer-card">
+                <span>Timer</span>
+                <strong id="timer-display">00:00</strong>
+                <p id="timer-copy">Choose your role and difficulty, then start the test to begin the countdown.</p>
+            </div>
+
+            <div class="test-status-card">
+                <span>Status</span>
+                <strong id="test-status">Waiting to start</strong>
+                <p id="status-copy">The test will load five questions for the selected field and difficulty level.</p>
+            </div>
+
+            <div class="test-score-card">
+                <span>Latest Score</span>
+                <strong id="score-display">Not graded yet</strong>
+                <p id="score-copy">Your score appears here after you submit the test or the timer ends.</p>
+            </div>
+        </aside>
+
+        <section class="test-panel">
+            <div class="test-panel-header">
+                <div>
+                    <h2>Question Set</h2>
+                    <p id="test-description">Start a test to generate a role-based set of live questions.</p>
+                </div>
+                <div class="test-meta">
+                    <span class="test-meta-pill" id="question-count-pill">0 Questions</span>
+                    <span class="test-meta-pill" id="difficulty-pill">Difficulty: Medium</span>
+                </div>
+            </div>
+
+            <form id="live-test-form">
+                <div id="question-list" class="question-list">
+                    <article class="question-card">
+                        <h3>Ready when you are</h3>
+                        <p>Select a field, choose a difficulty, and press <strong>Start Live Test</strong> to generate your timed question set.</p>
+                    </article>
+                </div>
+
+                <div class="test-actions">
+                    <button id="submit-test-btn" class="btn" type="submit" disabled>Submit Test</button>
+                    <button id="restart-test-btn" class="btn btn-secondary" type="button" disabled>Generate New Test</button>
+                </div>
+            </form>
+
+            <p class="test-note">Easy tests use a shorter and more direct set, medium raises the depth, and hard includes more scenario-based questions.</p>
+        </section>
+    </div>
+</main>
+
+<footer class="copyright">
+    &copy; 2026 JobFinder. All rights reserved.
+</footer>
+
+<script>
+    const PREP_STORAGE_KEY = "jobBoardInterviewPrep";
+    const QUESTION_COUNT = 5;
+    const testRole = document.getElementById("test-role");
+    const testDifficulty = document.getElementById("test-difficulty");
+    const startTestBtn = document.getElementById("start-test-btn");
+    const submitTestBtn = document.getElementById("submit-test-btn");
+    const restartTestBtn = document.getElementById("restart-test-btn");
+    const liveTestForm = document.getElementById("live-test-form");
+    const questionList = document.getElementById("question-list");
+    const timerDisplay = document.getElementById("timer-display");
+    const timerCopy = document.getElementById("timer-copy");
+    const testStatus = document.getElementById("test-status");
+    const statusCopy = document.getElementById("status-copy");
+    const scoreDisplay = document.getElementById("score-display");
+    const scoreCopy = document.getElementById("score-copy");
+    const testDescription = document.getElementById("test-description");
+    const questionCountPill = document.getElementById("question-count-pill");
+    const difficultyPill = document.getElementById("difficulty-pill");
+
+    let activeQuestions = [];
+    let activeTimerId = null;
+    let timeRemaining = 0;
+    let testRunning = false;
+
+    const durationByDifficulty = {
+        Easy: 8 * 60,
+        Medium: 10 * 60,
+        Hard: 12 * 60
+    };
+
+    const questionBank = {
+        "Frontend Developer": {
+            Easy: [
+                { question: "What is the main purpose of component state in a frontend app?", options: ["To store UI data that can change over time", "To compile CSS into JavaScript", "To replace HTML templates entirely", "To prevent all rerenders"], answer: 0 },
+                { question: "Which HTML attribute is most useful for improving accessibility on form inputs?", options: ["href", "alt", "label association", "target"], answer: 2 },
+                { question: "Why is responsive design important?", options: ["It reduces all API calls", "It helps layouts adapt across screen sizes", "It removes the need for CSS", "It only matters on desktop"], answer: 1 },
+                { question: "Which React hook is commonly used for side effects like fetching data?", options: ["useState", "useEffect", "useRef", "useId"], answer: 1 },
+                { question: "What is one benefit of reusable UI components?", options: ["They eliminate testing", "They reduce consistency", "They promote maintainability", "They stop browser caching"], answer: 2 }
+            ],
+            Medium: [
+                { question: "What problem does virtual DOM diffing primarily help solve?", options: ["Database indexing", "Efficient UI updates", "Server authentication", "Static asset compression"], answer: 1 },
+                { question: "Which approach best avoids prop drilling in a growing React app?", options: ["Context or shared state patterns", "Inline styles only", "Using more global variables", "Replacing JSX with plain HTML"], answer: 0 },
+                { question: "When optimizing a slow page, what should you inspect first?", options: ["The font family", "Real render and network bottlenecks", "Only the file names", "The favicon"], answer: 1 },
+                { question: "What is a good reason to debounce a search input?", options: ["To make the browser fullscreen", "To reduce repeated expensive actions while typing", "To disable keyboard entry", "To cache images"], answer: 1 },
+                { question: "Which concern is closest to client-side accessibility?", options: ["Semantic markup and keyboard support", "Database sharding", "Container orchestration", "Server log rotation"], answer: 0 }
+            ],
+            Hard: [
+                { question: "A dashboard rerenders too often after small state changes. What is the best first move?", options: ["Measure component update paths and isolate state ownership", "Remove all state", "Replace CSS with SVG", "Disable event handlers"], answer: 0 },
+                { question: "Why might code splitting improve perceived performance?", options: ["It moves all logic to SQL", "It reduces the initial JavaScript payload", "It disables caching", "It increases bundle size intentionally"], answer: 1 },
+                { question: "Which case most strongly justifies server-side rendering or pre-rendering?", options: ["Improving crawlability and first paint for content-heavy pages", "Avoiding all CSS", "Replacing APIs", "Removing routing"], answer: 0 },
+                { question: "What is the biggest risk of storing too much derived state in components?", options: ["Faster builds", "State mismatch and maintenance complexity", "Better caching", "Smaller bundles"], answer: 1 },
+                { question: "How should you handle a complex form with async validation?", options: ["Mix all rules into one click handler only", "Structure validation by field and async states with clear feedback", "Disable inputs permanently", "Skip loading indicators"], answer: 1 }
+            ]
+        },
+        "Backend Developer": {
+            Easy: [
+                { question: "What is the main job of an API endpoint?", options: ["Render CSS", "Handle requests and return data or actions", "Replace a database", "Compile frontend assets"], answer: 1 },
+                { question: "Why is input validation important on the server?", options: ["It changes the operating system", "It protects data quality and security", "It makes HTML semantic", "It replaces authentication"], answer: 1 },
+                { question: "What does an HTTP 404 usually mean?", options: ["Unauthorized", "Server crashed", "Resource not found", "Database locked"], answer: 2 },
+                { question: "Why are logs useful in backend systems?", options: ["They decorate the UI", "They help trace behavior and failures", "They replace monitoring", "They remove latency"], answer: 1 },
+                { question: "What is a database transaction for?", options: ["Styling responses", "Grouping operations safely", "Caching images", "Minifying JSON"], answer: 1 }
+            ],
+            Medium: [
+                { question: "Which design choice usually improves API maintainability?", options: ["Consistent contracts and error responses", "Random status codes", "No versioning strategy", "Returning HTML for every route"], answer: 0 },
+                { question: "What is a practical use of rate limiting?", options: ["Faster CSS rendering", "Preventing abuse and traffic spikes from overwhelming services", "Replacing encryption", "Removing authentication"], answer: 1 },
+                { question: "Why is idempotency useful for some endpoints?", options: ["It ensures repeated requests do not create inconsistent side effects", "It deletes retries", "It increases payload size", "It removes monitoring"], answer: 0 },
+                { question: "What is the benefit of background jobs?", options: ["They replace APIs", "They move long-running work out of request time", "They remove databases", "They skip observability"], answer: 1 },
+                { question: "What should a backend service do when a dependency times out?", options: ["Ignore it silently", "Fail clearly and handle retries or fallback paths", "Shut down the whole app", "Return success always"], answer: 1 }
+            ],
+            Hard: [
+                { question: "A service has intermittent latency spikes. What is the strongest first step?", options: ["Profile the request path and inspect external dependency timing", "Rename endpoints", "Disable logs", "Reduce all response codes to 200"], answer: 0 },
+                { question: "Which architecture concern matters most when splitting a monolith into services?", options: ["Clear service boundaries and data ownership", "Matching icon colors", "Using more file extensions", "Removing observability"], answer: 0 },
+                { question: "Why are circuit breakers or fallback strategies valuable?", options: ["They improve font loading", "They limit cascading failures when dependencies degrade", "They replace testing", "They reduce schema quality"], answer: 1 },
+                { question: "What is a key tradeoff of eventual consistency?", options: ["Simpler UI only", "Temporary stale reads in exchange for scale or decoupling", "No need for retries", "Guaranteed immediate global sync"], answer: 1 },
+                { question: "What is the best reason to use structured logging?", options: ["It makes querying and correlating events easier", "It removes metrics", "It replaces tracing", "It hides incidents"], answer: 0 }
+            ]
+        },
+        "Database Engineer": {
+            Easy: [
+                { question: "What is a primary key used for?", options: ["Styling tables", "Uniquely identifying rows", "Encrypting passwords", "Compressing files"], answer: 1 },
+                { question: "What does an index usually help with?", options: ["Query speed on targeted lookups", "UI animations", "Email delivery", "Image rendering"], answer: 0 },
+                { question: "Why is normalization used?", options: ["To remove all joins", "To reduce redundancy and improve consistency", "To style dashboards", "To replace backups"], answer: 1 },
+                { question: "What is a JOIN for?", options: ["Combining related data across tables", "Building APIs", "Creating CSS selectors", "Rotating logs"], answer: 0 },
+                { question: "Why are backups important?", options: ["They improve page layout", "They help recover data after failure", "They replace indexes", "They stop all bugs"], answer: 1 }
+            ],
+            Medium: [
+                { question: "When can an index hurt performance?", options: ["Never", "When writes become heavier due to index maintenance", "Only on SELECT queries", "Only in spreadsheets"], answer: 1 },
+                { question: "What is a good use case for transactions?", options: ["Coordinating related updates that must succeed together", "Changing font size", "Serving static images", "Replacing monitoring"], answer: 0 },
+                { question: "What does query optimization usually involve?", options: ["Looking at execution plans and schema design", "Only renaming tables", "Changing all columns to text", "Disabling constraints"], answer: 0 },
+                { question: "Why are foreign keys valuable?", options: ["They add animations", "They enforce relationship integrity", "They improve CSS reuse", "They replace backups"], answer: 1 },
+                { question: "What is a likely sign of missing indexing?", options: ["Fast lookups", "Slow filtered queries on large tables", "Small schema files", "Short column names"], answer: 1 }
+            ],
+            Hard: [
+                { question: "A report query is slow after rapid data growth. What should you examine first?", options: ["Execution plan, cardinality, and scan patterns", "Button labels", "Browser extensions", "Image formats"], answer: 0 },
+                { question: "Which tradeoff often appears in denormalized schemas?", options: ["Better read speed but more data duplication risk", "No write costs", "Automatic consistency", "No need for validation"], answer: 0 },
+                { question: "What is the strongest reason to partition large datasets?", options: ["To improve manageability and performance for certain access patterns", "To avoid backups", "To remove all indexes", "To skip monitoring"], answer: 0 },
+                { question: "Why do isolation levels matter?", options: ["They define how concurrent reads and writes interact", "They style SQL results", "They replace transactions", "They prevent all deadlocks automatically"], answer: 0 },
+                { question: "What should guide the choice between OLTP and OLAP data models?", options: ["The workload pattern and type of queries being optimized", "The company logo", "The font stack", "The IDE theme"], answer: 0 }
+            ]
+        },
+        "GIS Analyst": {
+            Easy: [
+                { question: "What does GIS stand for?", options: ["Geographic Information System", "Graphical Internet Service", "Global Indexing Suite", "General Interface Setup"], answer: 0 },
+                { question: "What is a spatial layer?", options: ["A stylesheet", "A collection of geographic features", "A database password", "A server thread"], answer: 1 },
+                { question: "Why are coordinate systems important?", options: ["They help place geographic data correctly", "They only affect colors", "They replace map layers", "They remove geocoding"], answer: 0 },
+                { question: "What is a common vector geometry type?", options: ["Pixel", "Polygon", "Gradient", "Socket"], answer: 1 },
+                { question: "What is geocoding used for?", options: ["Turning locations into map coordinates", "Compressing maps", "Building CI pipelines", "Encrypting layers"], answer: 0 }
+            ],
+            Medium: [
+                { question: "What is a spatial join?", options: ["Joining records based on spatial relationships", "Combining CSS files", "Merging APIs", "Scaling servers"], answer: 0 },
+                { question: "Why can projection choice affect analysis quality?", options: ["Different projections distort area, distance, or direction differently", "It changes HTML semantics", "It removes geometry", "It only changes labels"], answer: 0 },
+                { question: "What is raster data commonly used for?", options: ["Continuous surfaces like elevation or imagery", "Only user authentication", "Text indexing", "Container management"], answer: 0 },
+                { question: "What is one reason to simplify geometry?", options: ["Reduce complexity for performance at some zoom levels", "Increase file size", "Remove all attributes", "Replace spatial indexes"], answer: 0 },
+                { question: "What should you verify before merging spatial datasets?", options: ["Compatible coordinate systems and attributes", "Browser cache size", "Font rendering", "Video codec"], answer: 0 }
+            ],
+            Hard: [
+                { question: "A map analysis shows inconsistent distances across regions. What is the first likely cause?", options: ["Projection mismatch or unsuitable CRS", "Incorrect button color", "Slow Wi-Fi only", "Missing CSS reset"], answer: 0 },
+                { question: "What is the strongest reason to use spatial indexing?", options: ["To speed up geographic queries like intersects and nearby search", "To replace map tiles", "To avoid projections", "To remove geometries"], answer: 0 },
+                { question: "Why might topology validation matter before analysis?", options: ["Geometry errors can corrupt downstream spatial results", "It improves logo design", "It replaces metadata", "It increases coordinate precision automatically"], answer: 0 },
+                { question: "When handling large web maps, what is a common performance strategy?", options: ["Generalize data and load by zoom or bounds", "Render every feature at max detail always", "Disable caching", "Convert all data to plain text"], answer: 0 },
+                { question: "What is the key difference between geocoding and reverse geocoding?", options: ["One turns places into coordinates and the other coordinates into place information", "They are identical", "One is only for rasters", "One replaces layers"], answer: 0 }
+            ]
+        },
+        "DevOps Engineer": {
+            Easy: [
+                { question: "What is CI/CD mainly about?", options: ["Automating build, test, and deployment flow", "Designing logos", "Managing spreadsheets", "Creating map tiles"], answer: 0 },
+                { question: "Why are containers useful?", options: ["They package applications consistently across environments", "They replace networking", "They remove logging", "They stop all downtime"], answer: 0 },
+                { question: "What is monitoring for?", options: ["Watching system health and behavior", "Replacing backups", "Writing CSS", "Compressing SQL"], answer: 0 },
+                { question: "What does infrastructure as code help with?", options: ["Repeatable environment setup", "Frontend animations", "Email design", "Database joins"], answer: 0 },
+                { question: "Why are alerts important?", options: ["They provide timely visibility into incidents", "They remove outages", "They replace logs", "They disable deploys"], answer: 0 }
+            ],
+            Medium: [
+                { question: "What is one major benefit of blue-green or canary deployments?", options: ["Safer rollouts with reduced blast radius", "No need for testing", "Faster CSS", "Smaller monitor screens"], answer: 0 },
+                { question: "Why is observability broader than logging alone?", options: ["It combines logs, metrics, and traces for faster diagnosis", "It only means dashboards", "It replaces incident response", "It avoids instrumentation"], answer: 0 },
+                { question: "What is a practical reason to use autoscaling?", options: ["Adjust capacity based on load patterns", "Change the app color", "Remove rate limiting", "Skip capacity planning"], answer: 0 },
+                { question: "Why is secret management important?", options: ["It protects credentials and reduces accidental exposure", "It replaces IAM", "It improves typography", "It compresses assets"], answer: 0 },
+                { question: "What is the role of a runbook during incidents?", options: ["Provide repeatable operational steps", "Replace production systems", "Disable logging", "Format YAML automatically"], answer: 0 }
+            ],
+            Hard: [
+                { question: "A deployment is healthy in staging but fails intermittently in production. What is the strongest first check?", options: ["Differences in environment, traffic profile, and dependency behavior", "Rename the repository", "Remove alerts", "Change the favicon"], answer: 0 },
+                { question: "Why are SLOs useful?", options: ["They align reliability goals with measurable service expectations", "They replace all metrics", "They remove the need for on-call", "They only help design teams"], answer: 0 },
+                { question: "What is a key tradeoff of aggressive autoscaling?", options: ["Cost and system churn versus responsiveness", "No tradeoff exists", "It disables monitoring", "It removes caching"], answer: 0 },
+                { question: "Why should rollback automation be carefully designed?", options: ["A bad rollback can compound incidents if state changed", "It only changes UI text", "It eliminates testing", "It replaces version control"], answer: 0 },
+                { question: "What is the most valuable post-incident output?", options: ["A blameless review with concrete preventive actions", "A new color palette", "A shorter hostname", "A larger logo"], answer: 0 }
+            ]
+        },
+        "Full Stack Developer": {
+            Easy: [
+                { question: "What does a full stack role usually involve?", options: ["Working across frontend and backend concerns", "Only database backups", "Only UI color choices", "Only container setup"], answer: 0 },
+                { question: "Why is API integration important on the frontend?", options: ["It connects the UI to backend data and actions", "It replaces CSS", "It removes routing", "It disables state"], answer: 0 },
+                { question: "What is one benefit of authentication?", options: ["Controlling access to protected features", "Speeding up animations", "Replacing databases", "Compressing code"], answer: 0 },
+                { question: "Why are validations useful both client-side and server-side?", options: ["They improve data quality and user experience", "They remove networking", "They replace testing", "They stop deployments"], answer: 0 },
+                { question: "What is a common full stack concern?", options: ["How data moves from UI to API to storage", "Only map projections", "Only image filters", "Only cron syntax"], answer: 0 }
+            ],
+            Medium: [
+                { question: "What is the benefit of separating presentation logic from business logic?", options: ["It improves maintainability across UI and server layers", "It removes APIs", "It eliminates testing", "It makes CSS slower"], answer: 0 },
+                { question: "Why are end-to-end flows valuable to understand in interviews?", options: ["They show you can reason across the whole product path", "They replace system design", "They remove logging", "They disable validation"], answer: 0 },
+                { question: "When debugging a user-reported bug, what is a strong first step?", options: ["Trace the flow from UI input to backend response and data state", "Rewrite the app", "Delete logs", "Change the difficulty level"], answer: 0 },
+                { question: "What is a common tradeoff in full stack apps?", options: ["Fast delivery versus maintainable architecture", "No tradeoffs exist", "Only choosing button colors", "Only picking SQL keywords"], answer: 0 },
+                { question: "Why is consistent API contract design important?", options: ["It reduces friction between frontend and backend teams", "It only affects deployment", "It replaces authentication", "It removes schema changes"], answer: 0 }
+            ],
+            Hard: [
+                { question: "A feature feels slow, but only for some users. What is the best first investigation path?", options: ["Inspect frontend rendering, API latency, and data volume together", "Replace all CSS", "Disable monitoring", "Only rename endpoints"], answer: 0 },
+                { question: "Which approach best supports long-term product scalability?", options: ["Clear module boundaries and shared contracts between layers", "One massive shared file", "No validation", "Manual deployments only"], answer: 0 },
+                { question: "Why are asynchronous workflows tricky in full stack systems?", options: ["They require careful handling of UI state, retries, and consistency", "They only affect logos", "They remove APIs", "They stop caching"], answer: 0 },
+                { question: "What is a strong interview answer when discussing architecture tradeoffs?", options: ["Explain why a chosen approach fit the product constraints and risks", "Say every tool is always best", "Avoid mentioning compromises", "Only discuss color themes"], answer: 0 },
+                { question: "What is a common risk when frontend and backend evolve independently?", options: ["Contract drift causing runtime failures or broken experiences", "Faster builds only", "Better caching automatically", "Less need for testing"], answer: 0 }
+            ]
+        }
+    };
+
+    const getStoredPrep = () => {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(PREP_STORAGE_KEY) || "null");
+            return parsed && typeof parsed === "object" ? parsed : null;
+        } catch {
+            return null;
+        }
+    };
+
+    const getRoleFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("role");
+    };
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const secs = (seconds % 60).toString().padStart(2, "0");
+        return `${mins}:${secs}`;
+    };
+
+    const updateTimerUI = () => {
+        timerDisplay.textContent = formatTime(timeRemaining);
+    };
+
+    const stopTimer = () => {
+        if (activeTimerId) {
+            window.clearInterval(activeTimerId);
+            activeTimerId = null;
+        }
+    };
+
+    const buildQuestionCard = (question, index) => {
+        const optionsHtml = question.options.map((option, optionIndex) => `
+                <label class="question-option">
+                    <input type="radio" name="question-${index}" value="${optionIndex}">
+                    <span>${option}</span>
+                </label>
+            `).join("");
+
+        return `
+            <article class="question-card" data-question-index="${index}">
+                <h3>Question ${index + 1}</h3>
+                <p>${question.question}</p>
+                <div class="question-options">${optionsHtml}</div>
+            </article>
+        `;
+    };
+
+    const renderQuestions = () => {
+        questionList.innerHTML = activeQuestions.map((question, index) => buildQuestionCard(question, index)).join("");
+        questionCountPill.textContent = `${activeQuestions.length} Questions`;
+        difficultyPill.textContent = `Difficulty: ${testDifficulty.value}`;
+        submitTestBtn.disabled = false;
+        restartTestBtn.disabled = false;
+    };
+
+    const getSelectedAnswers = () => {
+        return activeQuestions.map((question, index) => {
+            const checked = liveTestForm.querySelector(`input[name="question-${index}"]:checked`);
+            return checked ? Number(checked.value) : null;
+        });
+    };
+
+    const gradeTest = (autoSubmitted = false) => {
+        if (!activeQuestions.length) return;
+
+        stopTimer();
+        testRunning = false;
+
+        const selectedAnswers = getSelectedAnswers();
+        let score = 0;
+
+        activeQuestions.forEach((question, index) => {
+            const card = questionList.querySelector(`[data-question-index="${index}"]`);
+            const options = card.querySelectorAll(".question-option");
+            const selected = selectedAnswers[index];
+
+            card.classList.remove("unanswered");
+            if (selected === null) {
+                card.classList.add("unanswered");
+            }
+
+            options.forEach((option, optionIndex) => {
+                option.classList.remove("correct", "incorrect");
+                if (optionIndex === question.answer) {
+                    option.classList.add("correct");
+                } else if (selected === optionIndex) {
+                    option.classList.add("incorrect");
+                }
+            });
+
+            if (selected === question.answer) {
+                score += 1;
+            }
+        });
+
+        scoreDisplay.textContent = `${score} / ${activeQuestions.length}`;
+        scoreCopy.textContent = autoSubmitted
+            ? "Time expired, so the test was submitted automatically."
+            : "Your answers have been graded. Review the highlighted options above.";
+        testStatus.textContent = autoSubmitted ? "Auto-submitted" : "Submitted";
+        statusCopy.textContent = "You can generate a new test at the same or a different difficulty whenever you want.";
+        timerCopy.textContent = autoSubmitted ? "The timer reached zero and the current test has been graded." : "The timer has stopped for this completed test.";
+        submitTestBtn.disabled = true;
+    };
+
+    const startTimer = () => {
+        stopTimer();
+        updateTimerUI();
+        activeTimerId = window.setInterval(() => {
+            timeRemaining -= 1;
+            updateTimerUI();
+
+            if (timeRemaining <= 0) {
+                timeRemaining = 0;
+                updateTimerUI();
+                gradeTest(true);
+            }
+        }, 1000);
+    };
+
+    const startTest = () => {
+        const role = testRole.value;
+        const difficulty = testDifficulty.value;
+        const questionsForRole = questionBank[role];
+
+        activeQuestions = questionsForRole[difficulty].slice(0, QUESTION_COUNT);
+        renderQuestions();
+
+        timeRemaining = durationByDifficulty[difficulty];
+        updateTimerUI();
+        testRunning = true;
+        testStatus.textContent = "In progress";
+        statusCopy.textContent = `You are taking a ${difficulty.toLowerCase()} ${role.toLowerCase()} test with ${activeQuestions.length} questions.`;
+        timerCopy.textContent = `The ${difficulty.toLowerCase()} test timer is running now. Submit before the countdown ends.`;
+        testDescription.textContent = `This set is tailored for ${role} and tuned to ${difficulty.toLowerCase()} difficulty.`;
+        scoreDisplay.textContent = "In progress";
+        scoreCopy.textContent = "Finish the questions and submit before the timer runs out.";
+        startTimer();
+    };
+
+    liveTestForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!testRunning) return;
+        gradeTest(false);
+    });
+
+    startTestBtn.addEventListener("click", startTest);
+    restartTestBtn.addEventListener("click", startTest);
+    testDifficulty.addEventListener("change", () => {
+        difficultyPill.textContent = `Difficulty: ${testDifficulty.value}`;
+    });
+
+    const storedPrep = getStoredPrep();
+    const initialRole = getRoleFromUrl() || (storedPrep && storedPrep.roleTrack);
+    if (initialRole && questionBank[initialRole]) {
+        testRole.value = initialRole;
+    }
+
+    difficultyPill.textContent = `Difficulty: ${testDifficulty.value}`;
+    updateTimerUI();
+</script>
+
+</body>
+</html>

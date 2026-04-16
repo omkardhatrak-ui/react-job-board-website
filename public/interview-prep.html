@@ -56,8 +56,8 @@
 
         <aside class="prep-hero-side">
             <div class="prep-stat">
-                <span>Tracks</span>
-                <strong>Frontend, Backend, Database, GIS, DevOps</strong>
+                <span>Prep Mode</span>
+                <strong>Role-based practice and live assessment</strong>
             </div>
             <div class="prep-stat">
                 <span>Current Step</span>
@@ -65,7 +65,7 @@
             </div>
             <div class="prep-stat">
                 <span>Outcome</span>
-                <strong>Custom revision direction for your next interview round</strong>
+                <strong>Launch a timed test tailored to your selected role</strong>
             </div>
         </aside>
     </section>
@@ -141,29 +141,53 @@
 
     <section class="prep-panel" id="prep-result-panel">
         <div class="panel-heading">
-            <h2>Your Prep Snapshot</h2>
-            <p class="prep-result-copy">Submit the preliminary questions to see your role-based preparation summary.</p>
+            <h2>Live Test Generator</h2>
+            <p class="prep-result-copy">Build your interview test from the role you selected here, then choose the difficulty and start a timed session on the next page.</p>
         </div>
 
         <div class="prep-result-grid">
             <article class="prep-result-card">
-                <span>Role Track</span>
+                <span>Selected Role</span>
                 <strong id="result-role">Not chosen yet</strong>
             </article>
             <article class="prep-result-card">
-                <span>Priority Topic</span>
+                <span>Practice Focus</span>
                 <strong id="result-priority">Not chosen yet</strong>
             </article>
             <article class="prep-result-card">
-                <span>Recommended Round</span>
+                <span>Test Flow</span>
                 <strong id="result-round">Not chosen yet</strong>
             </article>
         </div>
 
-        <p id="prep-summary" class="prep-result-copy">You have not answered the preliminary questions yet.</p>
-        <ul id="prep-advice" class="prep-bullets">
-            <li>Choose a target role to start building a custom interview path.</li>
-        </ul>
+        <div class="test-launcher">
+            <p id="prep-summary" class="prep-result-copy">Answer the preliminary questions to unlock a role-based live test with timer and difficulty controls.</p>
+            <ul id="prep-advice" class="prep-bullets">
+                <li>Choose a target role to start building a custom interview test path.</li>
+            </ul>
+
+            <div class="test-launcher-actions">
+                <a id="live-test-link" href="./live-test.html" class="btn live-test-btn" aria-disabled="true">Generate Live Test</a>
+                <span id="live-test-hint" class="test-launcher-hint">Complete the form first so we can carry your chosen field into the live test.</span>
+            </div>
+        </div>
+        <div class="test-launcher-features">
+            <article class="test-feature-card">
+                <span>Step 1</span>
+                <strong>Pick your role</strong>
+                <p>The live test page preloads your selected role so the questions stay relevant.</p>
+            </article>
+            <article class="test-feature-card">
+                <span>Step 2</span>
+                <strong>Choose difficulty</strong>
+                <p>Switch between Easy, Medium, and Hard before starting the test.</p>
+            </article>
+            <article class="test-feature-card">
+                <span>Step 3</span>
+                <strong>Take a timed test</strong>
+                <p>Work through a countdown-based question set and review your score at the end.</p>
+            </article>
+        </div>
     </section>
 </main>
 
@@ -180,6 +204,8 @@
     const resultRound = document.getElementById("result-round");
     const prepSummary = document.getElementById("prep-summary");
     const prepAdvice = document.getElementById("prep-advice");
+    const liveTestLink = document.getElementById("live-test-link");
+    const liveTestHint = document.getElementById("live-test-hint");
 
     const rolePlaybooks = {
         "Frontend Developer": ["Revise components, props, state, hooks, accessibility, and API rendering.", "Be ready to explain one UI project end-to-end.", "Practice DOM, event handling, responsive layout, and performance questions."],
@@ -191,7 +217,7 @@
     };
 
     const buildSummary = (answers) => {
-        return `For a ${answers.roleTrack} ${answers.interviewStyle.toLowerCase()}, prioritize ${answers.focusArea.toLowerCase()} and strengthen ${answers.weakSkill}. Your current strength in ${answers.strengthSkill} should be turned into one confident project story.`;
+        return `Your live test can now focus on ${answers.roleTrack.toLowerCase()} questions, with extra attention on ${answers.focusArea.toLowerCase()} and ${answers.weakSkill}. On the next page you can adjust the difficulty and start a timed practice session.`;
     };
 
     const renderAdvice = (answers) => {
@@ -214,9 +240,12 @@
     const renderResult = (answers) => {
         resultRole.textContent = answers.roleTrack;
         resultPriority.textContent = `${answers.focusArea} + ${answers.weakSkill}`;
-        resultRound.textContent = answers.interviewStyle;
+        resultRound.textContent = `${answers.interviewStyle} + Timed Test`;
         prepSummary.textContent = buildSummary(answers);
         renderAdvice(answers);
+        liveTestLink.href = `./live-test.html?role=${encodeURIComponent(answers.roleTrack)}`;
+        liveTestLink.setAttribute("aria-disabled", "false");
+        liveTestHint.textContent = "Your role is ready. Open the live test page, choose a difficulty, and begin the timed test.";
     };
 
     const readStoredPrep = () => {
@@ -266,8 +295,18 @@
         resultRole.textContent = "Not chosen yet";
         resultPriority.textContent = "Not chosen yet";
         resultRound.textContent = "Not chosen yet";
-        prepSummary.textContent = "You have not answered the preliminary questions yet.";
-        prepAdvice.innerHTML = "<li>Choose a target role to start building a custom interview path.</li>";
+        prepSummary.textContent = "Answer the preliminary questions to unlock a role-based live test with timer and difficulty controls.";
+        prepAdvice.innerHTML = "<li>Choose a target role to start building a custom interview test path.</li>";
+        liveTestLink.href = "./live-test.html";
+        liveTestLink.setAttribute("aria-disabled", "true");
+        liveTestHint.textContent = "Complete the form first so we can carry your chosen field into the live test.";
+    });
+
+    liveTestLink.addEventListener("click", (event) => {
+        if (liveTestLink.getAttribute("aria-disabled") === "true") {
+            event.preventDefault();
+            prepSummary.textContent = "Please answer and submit the form before opening the live test.";
+        }
     });
 
     applyStoredValues(readStoredPrep());
