@@ -5,6 +5,9 @@ body {
         radial-gradient(circle at 10% 10%, rgba(160, 215, 255, 0.45), transparent 45%),
         radial-gradient(circle at 90% 20%, rgba(214, 186, 255, 0.35), transparent 40%),
         linear-gradient(135deg, #e9f2ff 0%, #f6f0ff 45%, #eef7ff 100%);
+    color: #1a2f52;
+    min-height: 100vh;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
 
@@ -14,6 +17,13 @@ body {
     align-items: center;
     padding: 15px 60px;
     background: white;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .logo {
@@ -132,12 +142,100 @@ body {
 }
 
 
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .nav-links a {
     display: inline-flex;
     align-items: center;
-    margin: 0 8px;
+    margin: 0;
     text-decoration: none;
     color: #333;
+    transition: color 0.25s ease;
+}
+
+.theme-toggle {
+    border: 1px solid rgba(30, 111, 217, 0.18);
+    background: rgba(30, 111, 217, 0.08);
+    color: #163867;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 24px rgba(30, 111, 217, 0.12);
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(30, 111, 217, 0.14);
+    box-shadow: 0 14px 28px rgba(30, 111, 217, 0.18);
+}
+
+.theme-toggle:focus-visible {
+    outline: 3px solid rgba(30, 111, 217, 0.2);
+    outline-offset: 2px;
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    overflow: visible;
+}
+
+.theme-toggle .sun-core,
+.theme-toggle .moon-shape,
+.theme-toggle .moon-cut,
+.theme-toggle .sun-rays line {
+    transition: transform 0.35s ease, opacity 0.35s ease, fill 0.35s ease, stroke 0.35s ease;
+    transform-origin: center;
+}
+
+.theme-toggle .sun-core {
+    fill: #f7b733;
+    transform: scale(1);
+}
+
+.theme-toggle .sun-rays {
+    opacity: 1;
+}
+
+.theme-toggle .sun-rays line {
+    stroke: #f59e0b;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.theme-toggle .moon-shape {
+    fill: #1e3a8a;
+    opacity: 0;
+    transform: scale(0.5) rotate(-35deg);
+}
+
+.theme-toggle .moon-cut {
+    fill: #dbeafe;
+    opacity: 0;
+    transform: translate(5px, -4px);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .btn {
@@ -1328,12 +1426,255 @@ body {
     padding: 10px;
 }
 
+body[data-theme="dark"] {
+    color-scheme: dark;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(43, 89, 150, 0.35), transparent 35%),
+        radial-gradient(circle at 85% 15%, rgba(123, 92, 170, 0.24), transparent 30%),
+        linear-gradient(145deg, #07111f 0%, #0d1729 42%, #131d31 100%);
+    color: #dbe7ff;
+}
+
+body[data-theme="dark"] .navbar {
+    background: rgba(8, 14, 27, 0.88);
+    border-bottom: 1px solid rgba(120, 145, 187, 0.18);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+body[data-theme="dark"] .nav-links a {
+    color: #dbe7ff;
+}
+
+body[data-theme="dark"] .theme-toggle {
+    background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.2);
+    color: #f8fafc;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+body[data-theme="dark"] .theme-toggle:hover {
+    background: rgba(148, 163, 184, 0.2);
+}
+
+body[data-theme="dark"] .theme-toggle .sun-core,
+body[data-theme="dark"] .theme-toggle .sun-rays {
+    opacity: 0;
+}
+
+body[data-theme="dark"] .theme-toggle .sun-core {
+    transform: scale(0.4);
+}
+
+body[data-theme="dark"] .theme-toggle .sun-rays {
+}
+
+body[data-theme="dark"] .theme-toggle .moon-shape,
+body[data-theme="dark"] .theme-toggle .moon-cut {
+    opacity: 1;
+}
+
+body[data-theme="dark"] .theme-toggle .moon-shape {
+    transform: scale(1) rotate(0deg);
+    fill: #dbeafe;
+}
+
+body[data-theme="dark"] .theme-toggle .moon-cut {
+    fill: #0f172a;
+    transform: translate(0, 0);
+}
+
+body[data-theme="dark"] .container.light,
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .summary-card,
+body[data-theme="dark"] .hub-panel,
+body[data-theme="dark"] .profile-item,
+body[data-theme="dark"] .activity-item,
+body[data-theme="dark"] .empty-state,
+body[data-theme="dark"] .hub-table,
+body[data-theme="dark"] .prep-hero-copy,
+body[data-theme="dark"] .prep-hero-side,
+body[data-theme="dark"] .prep-panel,
+body[data-theme="dark"] .prep-result-card,
+body[data-theme="dark"] .test-launcher,
+body[data-theme="dark"] .test-feature-card,
+body[data-theme="dark"] .info-hero-card,
+body[data-theme="dark"] .info-side-card,
+body[data-theme="dark"] .info-panel,
+body[data-theme="dark"] .blog-post-card,
+body[data-theme="dark"] .test-panel,
+body[data-theme="dark"] .test-sidebar,
+body[data-theme="dark"] .timer-card,
+body[data-theme="dark"] .test-score-card,
+body[data-theme="dark"] .test-status-card,
+body[data-theme="dark"] .question-card,
+body[data-theme="dark"] .question-option,
+body[data-theme="dark"] .map-panel,
+body[data-theme="dark"] .jobs-panel,
+body[data-theme="dark"] .filter-bar,
+body[data-theme="dark"] .filter-pill,
+body[data-theme="dark"] .job-item,
+body[data-theme="dark"] .job-empty {
+    background: rgba(12, 20, 36, 0.9);
+    border-color: rgba(95, 118, 158, 0.35);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+}
+
+body[data-theme="dark"] .prep-cta {
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.32);
+}
+
+body[data-theme="dark"] .hub-eyebrow,
+body[data-theme="dark"] .prep-eyebrow,
+body[data-theme="dark"] .info-eyebrow,
+body[data-theme="dark"] .summary-card span,
+body[data-theme="dark"] .profile-item span,
+body[data-theme="dark"] .prep-stat span,
+body[data-theme="dark"] .prep-result-card span,
+body[data-theme="dark"] .test-feature-card span,
+body[data-theme="dark"] .timer-card span,
+body[data-theme="dark"] .test-status-card span,
+body[data-theme="dark"] .test-score-card span,
+body[data-theme="dark"] .filter-pill span,
+body[data-theme="dark"] .test-launcher-hint,
+body[data-theme="dark"] .test-note,
+body[data-theme="dark"] .center-note,
+body[data-theme="dark"] .job-item span,
+body[data-theme="dark"] .job-empty,
+body[data-theme="dark"] .hub-status,
+body[data-theme="dark"] .info-stat span {
+    color: #9fb4da;
+}
+
+body[data-theme="dark"] .section-title,
+body[data-theme="dark"] .hub-hero h1,
+body[data-theme="dark"] .summary-card strong,
+body[data-theme="dark"] .panel-heading h2,
+body[data-theme="dark"] .profile-item strong,
+body[data-theme="dark"] .prep-hero-copy h1,
+body[data-theme="dark"] .prep-stat strong,
+body[data-theme="dark"] .prep-result-card strong,
+body[data-theme="dark"] .test-feature-card strong,
+body[data-theme="dark"] .info-hero-card h1,
+body[data-theme="dark"] .info-panel h2,
+body[data-theme="dark"] .info-side-card h2,
+body[data-theme="dark"] .blog-post-card h2,
+body[data-theme="dark"] .test-sidebar h1,
+body[data-theme="dark"] .test-panel h2,
+body[data-theme="dark"] .timer-card strong,
+body[data-theme="dark"] .test-status-card strong,
+body[data-theme="dark"] .test-score-card strong,
+body[data-theme="dark"] .question-card h3,
+body[data-theme="dark"] .map-header h1,
+body[data-theme="dark"] .map-panel h2,
+body[data-theme="dark"] .jobs-panel h2,
+body[data-theme="dark"] .job-item strong,
+body[data-theme="dark"] .info-stat strong {
+    color: #f8fbff;
+}
+
+body[data-theme="dark"] .hub-intro,
+body[data-theme="dark"] .panel-heading p,
+body[data-theme="dark"] .activity-item span,
+body[data-theme="dark"] .prep-hero-copy p,
+body[data-theme="dark"] .prep-hero-side p,
+body[data-theme="dark"] .prep-panel p,
+body[data-theme="dark"] .prep-result-copy,
+body[data-theme="dark"] .prep-bullets,
+body[data-theme="dark"] .test-sidebar p,
+body[data-theme="dark"] .test-panel p,
+body[data-theme="dark"] .test-score-card p,
+body[data-theme="dark"] .map-header p,
+body[data-theme="dark"] .info-hero-card p,
+body[data-theme="dark"] .info-panel p,
+body[data-theme="dark"] .blog-post-card p,
+body[data-theme="dark"] .info-side-card p,
+body[data-theme="dark"] .info-side-card li,
+body[data-theme="dark"] .info-panel li,
+body[data-theme="dark"] .blog-post-card li {
+    color: #c7d5ec;
+}
+
+body[data-theme="dark"] .hub-table th {
+    background: #13253f;
+    color: #dce8ff;
+}
+
+body[data-theme="dark"] .hub-table td {
+    border-bottom-color: rgba(95, 118, 158, 0.28);
+    color: #d8e4fa;
+}
+
+body[data-theme="dark"] .json-preview {
+    background: #020817;
+    color: #dbeafe;
+}
+
+body[data-theme="dark"] .interest-chip,
+body[data-theme="dark"] .test-meta-pill {
+    background: rgba(31, 51, 86, 0.95);
+    border-color: rgba(105, 132, 182, 0.3);
+    color: #dce8ff;
+}
+
+body[data-theme="dark"] .prep-field label,
+body[data-theme="dark"] .test-config label {
+    color: #eff6ff;
+}
+
+body[data-theme="dark"] .prep-field select,
+body[data-theme="dark"] .prep-field input,
+body[data-theme="dark"] .test-config select,
+body[data-theme="dark"] .filter-pill select {
+    background: #0f1c31;
+    border-color: rgba(108, 132, 174, 0.38);
+    color: #f8fafc;
+}
+
+body[data-theme="dark"] .filter-pill select {
+    background-image:
+        linear-gradient(45deg, transparent 50%, #b9c8e2 50%),
+        linear-gradient(135deg, #b9c8e2 50%, transparent 50%),
+        linear-gradient(180deg, #0f1c31, #13253f);
+}
+
+body[data-theme="dark"] .question-option {
+    background: #101b2f;
+}
+
+body[data-theme="dark"] .question-option.correct {
+    background: rgba(18, 65, 43, 0.9);
+    border-color: rgba(81, 168, 119, 0.45);
+}
+
+body[data-theme="dark"] .question-option.incorrect {
+    background: rgba(83, 27, 27, 0.88);
+    border-color: rgba(222, 120, 120, 0.42);
+}
+
+body[data-theme="dark"] .question-card.unanswered {
+    background: rgba(91, 60, 18, 0.8);
+    border-color: rgba(220, 164, 88, 0.38);
+}
+
+body[data-theme="dark"] .footer {
+    background: #060d18;
+}
+
+body[data-theme="dark"] .copyright {
+    background: #02070f;
+}
+
 @media (max-width: 960px) {
     .navbar {
         padding: 16px 24px;
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
+    }
+
+    .nav-brand {
+        width: 100%;
+        justify-content: space-between;
     }
 
     .nav-links {

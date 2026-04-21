@@ -9,6 +9,7 @@
 <body>
 
 <nav class="navbar">
+    <div class="nav-brand">
     <div class="logo">
         <svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
             <defs>
@@ -33,6 +34,25 @@
 
             <text class="logo-text-svg" x="120" y="60">JobFinder</text>
         </svg>
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+        <span class="sr-only">Toggle color theme</span>
+        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <g class="sun-rays">
+                <line x1="16" y1="1.5" x2="16" y2="6"/>
+                <line x1="16" y1="26" x2="16" y2="30.5"/>
+                <line x1="1.5" y1="16" x2="6" y2="16"/>
+                <line x1="26" y1="16" x2="30.5" y2="16"/>
+                <line x1="5.2" y1="5.2" x2="8.4" y2="8.4"/>
+                <line x1="23.6" y1="23.6" x2="26.8" y2="26.8"/>
+                <line x1="5.2" y1="26.8" x2="8.4" y2="23.6"/>
+                <line x1="23.6" y1="8.4" x2="26.8" y2="5.2"/>
+            </g>
+            <circle class="sun-core" cx="16" cy="16" r="6.5"/>
+            <circle class="moon-shape" cx="16" cy="16" r="8"/>
+            <circle class="moon-cut" cx="19.5" cy="13" r="8"/>
+        </svg>
+    </button>
     </div>
 
     <div class="nav-links">
@@ -291,5 +311,6 @@
     renderHub();
 </script>
 
+<script src="./theme.js"></script>
 </body>
 </html>
